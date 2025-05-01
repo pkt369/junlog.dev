@@ -1,0 +1,342 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+
+    /* 코드 블록 변수 - 라이트 테마 */
+    --code-bg: #f8f9fa;
+    --code-header: #f1f3f5;
+    --code-border: #e9ecef;
+    --code-language: #495057;
+    --code-copy: #868e96;
+    --code-copy-hover: #495057;
+    --font-code: "Fira Code", "JetBrains Mono", "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+      monospace;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+
+    /* 코드 블록 변수 - 다크 테마 */
+    --code-bg: #1e1e1e;
+    --code-header: #252526;
+    --code-border: #333333;
+    --code-language: #e1e4e8;
+    --code-copy: #8b949e;
+    --code-copy-hover: #c9d1d9;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* 프로즈 스타일 */
+.prose {
+  @apply max-w-none;
+}
+
+.prose p {
+  @apply my-4 leading-7;
+}
+
+/* 헤딩 스타일 명확하게 구분 */
+.prose h1 {
+  @apply text-4xl font-extrabold mt-10 mb-6 pb-2 border-b;
+}
+
+.prose h2 {
+  @apply text-3xl font-bold mt-8 mb-4 pb-1 border-b border-muted;
+}
+
+.prose h3 {
+  @apply text-2xl font-bold mt-6 mb-3;
+}
+
+.prose h4 {
+  @apply text-xl font-semibold mt-6 mb-3;
+}
+
+.prose h5 {
+  @apply text-lg font-semibold mt-4 mb-2;
+}
+
+.prose h6 {
+  @apply text-base font-semibold mt-4 mb-2;
+}
+
+/* 코드 블록 스타일 */
+.prose pre {
+  @apply my-4 p-0 overflow-hidden bg-transparent;
+  border: none !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+.prose code {
+  @apply font-mono text-sm;
+}
+
+/* 인라인 코드 스타일 */
+.inline-code {
+  background-color: var(--code-bg);
+  color: #e83e8c;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: var(--font-code);
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.dark .inline-code {
+  color: #f08ca6;
+}
+
+/* 목록 스타일 */
+.prose ul {
+  @apply list-disc pl-6 my-4 space-y-2;
+}
+
+.prose ol {
+  @apply list-decimal pl-6 my-4 space-y-2;
+}
+
+/* 링크 스타일 */
+.prose a {
+  @apply text-primary hover:underline font-medium;
+}
+
+/* 인용구 스타일 */
+.prose blockquote {
+  @apply border-l-4 border-primary pl-4 italic my-4 text-muted-foreground;
+}
+
+/* 테이블 스타일 */
+.prose table {
+  @apply w-full border-collapse my-6;
+}
+
+.prose th {
+  @apply border border-border px-4 py-2 bg-muted font-semibold text-left;
+}
+
+.prose td {
+  @apply border border-border px-4 py-2;
+}
+
+/* 개행 처리를 위한 스타일 */
+.prose br {
+  @apply block my-2;
+}
+
+/* 이미지 스타일 */
+.prose img {
+  @apply block mx-auto max-w-full my-4 rounded-lg shadow-md;
+}
+
+/* 이미지 캡션을 위한 스타일 */
+.image-caption {
+  @apply text-center text-sm text-muted-foreground mt-1 mb-6;
+}
+
+/* 중앙 정렬 유틸리티 클래스 */
+.center-text {
+  @apply text-center;
+}
+
+/* 이미지 크기 클래스 */
+.img-small {
+  @apply max-w-[200px];
+}
+
+.img-medium {
+  @apply max-w-[400px];
+}
+
+.img-large {
+  @apply max-w-[600px];
+}
+
+/* 코드 블록 내부 스크롤바 스타일링 - 표준 CSS 사용 */
+pre::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.4);
+  border-radius: 9999px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(128, 128, 128, 0.6);
+}
+
+/* 코드 폰트 설정 */
+@font-face {
+  font-family: "Fira Code";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firacode/v21/uU9eCBsR6Z2vfE9aq3bL0fxyUs4tcw4W_D1sJV37Nv7g.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Prism.js 테마 커스터마이징 */
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #2d2d2d !important;
+  border: none !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+  text-shadow: none !important;
+  font-family: var(--font-code) !important;
+  font-size: 0.9rem !important;
+  border: none !important;
+}
+
+/* 코드 블록 주변 흰색 테두리 제거 */
+.relative.my-6.bg-\[\#2d2d2d\].rounded-lg.overflow-hidden {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 이미지 테두리 제거 */
+img {
+  border: none !important;
+}
+
+/* 코드 블록 내부 요소 테두리 제거 */
+pre,
+code {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #999 !important;
+}
+
+.token.punctuation {
+  color: #ccc !important;
+}
+
+.token.tag,
+.token.attr-name,
+.token.namespace,
+.token.deleted {
+  color: #e2777a !important;
+}
+
+.token.function-name {
+  color: #6196cc !important;
+}
+
+.token.boolean,
+.token.number,
+.token.function {
+  color: #f08d49 !important;
+}
+
+.token.property,
+.token.class-name,
+.token.constant,
+.token.symbol {
+  color: #f8c555 !important;
+}
+
+.token.selector,
+.token.important,
+.token.atrule,
+.token.keyword,
+.token.builtin {
+  color: #cc99cd !important;
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.regex,
+.token.variable {
+  color: #7ec699 !important;
+}
+
+.token.operator,
+.token.entity,
+.token.url {
+  color: #67cdcc !important;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold !important;
+}
+
+.token.italic {
+  font-style: italic !important;
+}
+
+.token.entity {
+  cursor: help !important;
+}
+
+.token.inserted {
+  color: #67cdcc !important;
+}
