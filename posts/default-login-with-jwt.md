@@ -1,7 +1,7 @@
 ---
 title:
   ko: "기본 로그인 구현 with Jwt token"
-  en: "Implement Default Login logic with Jwt token"
+  en: "Implement Default Login with Jwt token"
 excerpt:
   ko: "어떻게 로그인을 구현하고 Jwt 로 통신하는지에 대해 알아보겠습니다."
   en: "Let's learn how to implement login logic using JWT."
@@ -26,6 +26,7 @@ slug: "default-login-with-jwt"
 화면에서 요청하면 Oauth2, 기본 로그인 **모두 서버로 보내고**, 서버에서 분기처리하는 방식으로 진행이 됩니다.
 특히 Oauth2 의 경우에는 백엔드에서는 유저에게 따로 **새로운 페이지로 리다이렉션**시켜 소셜네트워크 로그인을 진행하게 됩니다.
 <br/>
+
 여기서 로그인이 성공하면 유저를 인증할 수 있는 방식을 유저에게 **쿠키**에 담아서 전달하게 됩니다.<br/>
 - **세션 방식**
 - **토큰 방식**
@@ -287,7 +288,6 @@ const login: SubmitHandler<LoginInput> = async (data) => {
     }
 };
 ```
-
 
 The server then verifies the user by receiving the login information.
 
