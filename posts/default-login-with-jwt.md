@@ -65,7 +65,7 @@ const login: SubmitHandler<LoginInput> = async (data) => {
                 setIsModalOpen(true);
                 return;
             }
-            if (e.response?.status === 400) { // Catch duplicate email error
+            if (e.response?.status === 400) {
                 setModalTitle('로그인 실패');
                 setModalMessage('로그인에 실패하였습니다. 이메일과 패스워드를 확인해주세요.');
                 setIsModalOpen(true);
@@ -276,7 +276,7 @@ const login: SubmitHandler<LoginInput> = async (data) => {
                 setIsModalOpen(true);
                 return;
             }
-            if (e.response?.status === 400) { // Catch duplicate email error
+            if (e.response?.status === 400) {
                 setModalTitle('Login failed');
                 setModalMessage('Login failed. Please check your email and password.');
                 setIsModalOpen(true);
