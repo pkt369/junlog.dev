@@ -55,56 +55,20 @@ function FeaturedPosts() {
     {
       id: "1",
       title: {
-        ko: "React 18의 새로운 기능",
-        en: "New Features in React 18",
+        ko: "기본 로그인 구현 with Jwt token",
+        en: "Implement Default Login with Jwt token",
       },
       excerpt: {
-        ko: "React 18에서 추가된 새로운 기능과 개선 사항에 대해 알아봅니다.",
-        en: "Learn about the new features and improvements in React 18.",
+        ko: "어떻게 로그인을 구현하고 Jwt 로 통신하는지에 대해 알아보겠습니다.",
+        en: "Let's learn how to implement login logic using JWT.",
       },
-      date: "2025-03-15",
+      date: "2025-04-28",
       category: {
-        ko: "프론트엔드",
-        en: "Frontend",
+        ko: "Backend",
+        en: "Backend",
       },
-      tags: ["React", "JavaScript", "Frontend"],
-      slug: "new-features-react-18",
-    },
-    {
-      id: "2",
-      title: {
-        ko: "Next.js로 정적 블로그 만들기",
-        en: "Creating a Static Blog with Next.js",
-      },
-      excerpt: {
-        ko: "Next.js를 사용하여 정적 블로그를 만드는 방법을 단계별로 알아봅니다.",
-        en: "Step-by-step guide to creating a static blog using Next.js.",
-      },
-      date: "2025-03-10",
-      category: {
-        ko: "튜토리얼",
-        en: "Tutorial",
-      },
-      tags: ["Next.js", "React", "Blog"],
-      slug: "static-blog-nextjs",
-    },
-    {
-      id: "3",
-      title: {
-        ko: "TypeScript 타입 시스템 마스터하기",
-        en: "Mastering TypeScript's Type System",
-      },
-      excerpt: {
-        ko: "TypeScript의 고급 타입 기능을 활용하여 더 안전한 코드를 작성하는 방법",
-        en: "How to write safer code by leveraging TypeScript's advanced type features.",
-      },
-      date: "2025-03-05",
-      category: {
-        ko: "타입스크립트",
-        en: "TypeScript",
-      },
-      tags: ["TypeScript", "JavaScript", "Programming"],
-      slug: "mastering-typescript-types",
+      tags: ["Jwt", "login", "spring boot", "react", "typescript", "java"],
+      slug: "default-login-with-jwt",
     },
   ]
 
