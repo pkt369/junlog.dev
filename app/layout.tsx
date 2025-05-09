@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     url: "https://yourblog.com",
-    siteName: "DevBlog",
+    siteName: "JunLog",
     title: "개발 블로그 | Dev Blog",
     description: "A personal development blog about web development, programming, and technology",
     images: [
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         url: "https://yourblog.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "DevBlog",
+        alt: "JunLog",
       },
     ],
   },
@@ -47,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="alternate" type="application/rss+xml" title="RSS Feed for DevBlog" href="/rss.xml" />
+        <link rel="alternate" type="application/rss+xml" title="RSS Feed for JunLog" href="/rss.xml" />
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>

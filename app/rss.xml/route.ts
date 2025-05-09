@@ -3,12 +3,12 @@ import { NextResponse } from "next/server"
 
 export async function GET() {
   const posts = await getSortedPostsData()
-  const siteUrl = process.env.SITE_URL || "https://yourblog.com"
+  const siteUrl = process.env.SITE_URL || "https://junlog.dev"
 
   const rssXml = `
     <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
       <channel>
-        <title>DevBlog</title>
+        <title>JunLog</title>
         <link>${siteUrl}</link>
         <description>A personal development blog</description>
         <language>en</language>

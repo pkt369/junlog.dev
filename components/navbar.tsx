@@ -44,7 +44,7 @@ export default function Navbar() {
         {/* 로고와 제목 - 모든 화면 크기에서 상단에 표시 */}
         <div className="flex items-center justify-between w-full md:w-auto">
           <Link href="/" className="font-bold text-xl">
-            DevBlog
+            JunLog
           </Link>
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
