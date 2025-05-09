@@ -2,8 +2,8 @@ import { getPostData, getAllPostIds } from "@/lib/posts"
 import BlogPostClient from "./BlogPostClient"
 
 export async function generateStaticParams() {
-  const paths = await getAllPostIds()
-  return paths
+  const slugs = await getAllPostIds();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
