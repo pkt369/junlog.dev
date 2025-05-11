@@ -378,7 +378,7 @@ Login is easier to implement than it seems, but if we run into issues, it can ta
 Finally, here are the key points to keep in mind when implementing login.
 <br>
 
-### Manage token expiration time
+### 1. Manage token expiration time
 
 If the token is expired, we should provide a refresh token or redirect the user to the login page with an alert about the expiration.
 In this case, I have implemented the approach where the user is redirected to the login page to log in again.
