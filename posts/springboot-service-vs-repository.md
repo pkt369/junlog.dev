@@ -1,21 +1,21 @@
 ---
 title:
   ko: "Service에서 Service를 호출해도 될까? Repository를 바로 써야 할까?"
-  en: "Service vs Repository: What Should You Use Inside a Spring Service?"
+  en: "Service vs Repository: What Should You Use Inside?"
 excerpt:
   ko: "Service에서 Service와 Repository 둘 중 어떤 것을 호출해서 사용하는 게 좋은 구조인지 알아봅시다."
   en: "Let’s explore whether it’s better to call another Service or a Repository within a Service."
-date: "2025-04-28"
+date: "2025-05-11"
 category:
   ko: "Backend"
   en: "Backend"
 tags: ["structure", "spring boot", "service", "repository", "java"]
-slug: "springboot-service-vs-repository"
+slug: "service-vs-repository"
 ---
 
 # 기본 구조
 
-먼저 설명하기에 앞서 **Spring Boot** 에서 어떻게 구조를 작성하는지에 간단하게 적어보겠습니다.
+먼저 설명하기에 앞서 서버코드에서 어떻게 구조를 작성하는지에 간단하게 적어보겠습니다.
 <br>
 
 가장 구조화된 패턴은 **MVC 패턴**으로 Controller - Service - Repository 로 나뉩니다.
@@ -80,14 +80,12 @@ public class AttendeeService {
 구조를 확정하기 전에 검색을 통해 여러 블로그들을 찾아보고, AI 에게 물어보고 나서도 헷갈려 스레드의 투표를 통해 여러 의견들을 모을 수 있었습니다.
 결론은 **Service 에서 Repository 만 사용하자** 입니다.
 
-<img width="560" alt="Image" src="https://github.com/user-attachments/assets/046159ac-0896-4941-9056-1e7fe963500a" />
+<img src="/service-vs-repository/poll.png" alt="service vs repository" align="center" />
 
 위 그림을 보면 Service 가 압도적으로 많은 것을 볼수 있고 스레드에서 다음과 같이 답글을 남겨주셨습니다.
 
 >> **통일성**이 제일 중요해요.
-<br>
 어디에서는 서비스에서 다른 서비스, 어디에서는 서비스에서 레포지토리 이런 식의 예측할 수 없는 코드는 **유지보수하기 정말 힘들어져요.**
-<br>
 프로젝트 내에서 통일성만 유지한다면 어느정도의 코드 중복은 유지보수에 큰 어려움은 아니예요.
 
 
@@ -108,7 +106,7 @@ public class AttendeeService {
 
 # Basic Structure
 
-Before we dive in, let’s briefly look at how we typically structure a Spring Boot project.
+Before we dive in, let’s briefly look at how we typically structure a Backend Project.
 <br>
 
 Most basic and widely used structure is **MVC Pattern**, which consists of Controller - Service - Repository.
@@ -176,15 +174,13 @@ Before finalizing the structure, I searched through various blogs and asked AI f
 But I was still confused about how to structure the services, so I asked in the Threads app and gathered opinions through a poll.
 As a result, the consensus was: **services should only communicate with repositories.**
 
-<img width="560" alt="Image" src="https://github.com/user-attachments/assets/046159ac-0896-4941-9056-1e7fe963500a" />
+<img src="/service-vs-repository/poll.png" alt="service vs repository" align="center" />
 
 As shown in the image above, we can see that **Service is the most selected option.**
 One person also left a comment, as shown below.
 
 >> **Consistency** is very important.
-<br>
 If one service calls another service, and other service only calls a repository, **it can make maintainability difficult.**
-<br>
 If we maintain consistency, code duplication won’t be a big problem.
 
 <br>
