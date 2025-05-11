@@ -12,14 +12,14 @@ import Footer from "@/components/footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "개발 블로그 | Dev Blog",
+  title: "JunLog Blog",
   description: "A personal development blog",
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://yourblog.com",
+    url: "https://junlog.dev",
     siteName: "JunLog",
-    title: "개발 블로그 | Dev Blog",
+    title: "JunLog Blog",
     description: "A personal development blog about web development, programming, and technology",
     images: [
       {
@@ -32,10 +32,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "개발 블로그 | Dev Blog",
+    title: "JunLog Blog",
     description: "A personal development blog about web development, programming, and technology",
     images: ["https://yourblog.com/og-image.jpg"],
-    creator: "@yourusername",
+    creator: "@sejun",
   },
 }
 
