@@ -9,9 +9,9 @@ export default async function BlogPage() {
   return (
     <div className="container mx-auto py-12">
       <div className="flex flex-col items-start gap-4 mb-8">
-        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">블로그</h1>
+        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Blog</h1>
         <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-          최근에 작성한 글들을 확인해보세요.
+          Let’s check the blogs that were recently published.
         </p>
       </div>
 

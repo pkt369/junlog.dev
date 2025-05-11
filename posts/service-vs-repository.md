@@ -80,9 +80,17 @@ public class AttendeeService {
 구조를 확정하기 전에 검색을 통해 여러 블로그들을 찾아보고, AI 에게 물어보고 나서도 헷갈려 스레드의 투표를 통해 여러 의견들을 모을 수 있었습니다.
 결론은 **Service 에서 Repository 만 사용하자** 입니다.
 
+<br>
+<br>
+
 <img src="/service-vs-repository/poll.png" alt="service vs repository" align="center" />
 
+<br>
+<br>
+
 위 그림을 보면 Service 가 압도적으로 많은 것을 볼수 있고 스레드에서 다음과 같이 답글을 남겨주셨습니다.
+
+<br>
 
 >> **통일성**이 제일 중요해요.
 어디에서는 서비스에서 다른 서비스, 어디에서는 서비스에서 레포지토리 이런 식의 예측할 수 없는 코드는 **유지보수하기 정말 힘들어져요.**
@@ -174,10 +182,18 @@ Before finalizing the structure, I searched through various blogs a\nd asked AI 
 But I was still confused about how to structure the services, so I asked in the Threads app and gathered opinions through a poll.
 As a result, the consensus was: **services should only communicate with repositories.**
 
+<br>
+<br>
+
 <img src="/service-vs-repository/poll.png" alt="service vs repository" align="center" />
+
+<br>
+<br>
 
 As shown in the image above, we can see that **Service is the most selected option.**
 One person also left a comment, as shown below.
+
+<br>
 
 >> **Consistency** is very important.
 If one service calls another service, and other service only calls a repository, **it can make maintainability difficult.**
