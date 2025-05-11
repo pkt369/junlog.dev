@@ -170,7 +170,7 @@ public class AttendeeService {
 <br>
 
 # Result
-Before finalizing the structure, I searched through various blogs and asked AI for advice.
+Before finalizing the structure, I searched through various blogs a\nd asked AI for advice.
 But I was still confused about how to structure the services, so I asked in the Threads app and gathered opinions through a poll.
 As a result, the consensus was: **services should only communicate with repositories.**
 
