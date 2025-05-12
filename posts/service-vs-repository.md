@@ -1,6 +1,6 @@
 ---
 title:
-  ko: "Service에서 Service를 호출해도 될까? Repository만 써야 할까?"
+  ko: "Service vs Repository: Service 에서 어떤것을 사용해야 될까?"
   en: "Service vs Repository: What Should You Use Inside?"
 excerpt:
   ko: "Service에서 Service 와 Repository 둘 중 어떤 것을 호출해서 사용하는 게 좋은 구조인지 알아봅시다."
