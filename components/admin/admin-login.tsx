@@ -13,6 +13,7 @@ import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
 import { useAdminAuth } from "@/hooks/use-admin-auth"
 import { LogIn } from "lucide-react"
+import bcrypt from "bcryptjs";
 
 // default export로 변경 (이전 코드와 호환성 유지)
 export default function AdminLogin() {
@@ -46,18 +47,20 @@ export default function AdminLogin() {
             if (email !== adminEmail) {
                 throw new Error(language === "ko" ? "관리자 계정이 아닙니다" : "Not an admin account")
             }
-
-            // SQL로 생성한 관리자 계정 인증 시도
-            const { data, error } = await supabase.rpc("authenticate_admin", {
-                p_email: email,
-                p_password: password,
-            })
-
-            console.log("인증 결과:", data)
-
+            const { data, error } = await supabase
+                .from("admin_users")
+                .select("*")
+                .eq("email", email)
+                .single();
+            
             if (error) {
                 console.error("SQL Auth error:", error)
                 throw new Error(language === "ko" ? `인증 오류: ${error.message}` : `Authentication error: ${error.message}`)
+            }
+
+            const isMatch = await bcrypt.compare(password, data.password_hash);
+            if (!isMatch) {
+                throw new Error(language === "ko" ? "비밀번호가 일치하지 않습니다" : "Password does not match");
             }
 
             if (!data || data.length === 0) {

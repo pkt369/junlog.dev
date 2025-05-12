@@ -446,7 +446,7 @@ export default function CommentList({ postSlug }: CommentListProps) {
                             </Label>
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <span className="text-muted-foreground text-sm">(?)</span>
+                                    <span className="text-muted-foreground text-sm"></span>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p className="max-w-xs">
