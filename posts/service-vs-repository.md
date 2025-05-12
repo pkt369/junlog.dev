@@ -1,9 +1,9 @@
 ---
 title:
-  ko: "Service에서 Service를 호출해도 될까? Repository를 바로 써야 할까?"
+  ko: "Service에서 Service를 호출해도 될까? Repository만 써야 할까?"
   en: "Service vs Repository: What Should You Use Inside?"
 excerpt:
-  ko: "Service에서 Service와 Repository 둘 중 어떤 것을 호출해서 사용하는 게 좋은 구조인지 알아봅시다."
+  ko: "Service에서 Service 와 Repository 둘 중 어떤 것을 호출해서 사용하는 게 좋은 구조인지 알아봅시다."
   en: "Let’s explore whether it’s better to call another Service or a Repository within a Service."
 date: "2025-05-11"
 category:
@@ -101,7 +101,7 @@ public class AttendeeService {
 <br>
 
 위의 답글에 크게 공감하였고, 앞으로의 구조에 대해서는 Service -> Repository 형태로 사용해야 겠다고 생각이 들었습니다.
-**개발자로써 이유없이 사용하는 것을 지양하고, 항상 생각하면서 이유를 담아볼려고 합니다.**
+**개발자로써 이유없이 사용하는 것을 지양하고, 항상 생각하면서 개발을 해야겠다고 생각했습니다.**
 
 
 <br>
@@ -178,9 +178,10 @@ public class AttendeeService {
 <br>
 
 # Result
-Before finalizing the structure, I searched through various blogs a\nd asked AI for advice.
+Before finalizing the structure, I searched through various blogs and asked AI for advice.
+
 But I was still confused about how to structure the services, so I asked in the Threads app and gathered opinions through a poll.
-As a result, the consensus was: **services should only communicate with repositories.**
+As a result, conclusion is **services should only communicate with repositories.**
 
 <br>
 <br>

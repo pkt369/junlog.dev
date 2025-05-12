@@ -166,7 +166,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
               return hasBlockElement ? <div {...props}>{children}</div> : <p {...props}>{children}</p>
             },
             // List styles
-            ul: ({ node, ...props }) => <ul className="list-disc pl-6 my-4 space-y-2" {...props} />,
+            ul: ({ node, ...props }) => <ul className="list-disc pl-6 !my-2 space-y-2" {...props} />,
             ol: ({ node, ...props }) => <ol className="list-decimal pl-6 my-4 space-y-2" {...props} />,
             // Blockquote styles
             blockquote: ({ node, ...props }) => (
