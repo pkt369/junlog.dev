@@ -8,7 +8,7 @@ export default function AboutPage() {
     <div className="container mx-auto py-12">
       <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:gap-12">
         <Avatar className="h-32 w-32 md:h-48 md:w-48">
-          <AvatarImage src="/placeholder.svg?height=192&width=192" alt="Profile" />
+          <AvatarImage src="/personal.jpeg?height=192&width=192" alt="Profile" />
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">

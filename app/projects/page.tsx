@@ -127,7 +127,7 @@ const projects: Project[] = [
       ko: "상점이나 병원 등에서 줄서는 사람들을 쉽게 관리해주는 웹 애플리케이션",
       en: "A web application that helps manage people waiting in line at stores or hospitals.",
     },
-    technologies: ["React", "Vite", "TypeScript", "Tailwind CSS", "Spring Boot", "PostgreSQL"],
+    technologies: ["React", "Vite", "TypeScript", "Tailwind CSS", "Spring Boot", "PostgreSQL", "docker"],
     githubFrontend: "https://github.com/smart-lineup/api",
     githubBackend: "https://github.com/pkt369/smart-lineup-front",
     site: "https://smart-lineup.com",
@@ -135,19 +135,36 @@ const projects: Project[] = [
   {
     id: 2,
     title: {
-      ko: "할 일 관리 앱",
-      en: "Todo Management App",
+      ko: "Echo Eco",
+      en: "Echo Eco",
     },
     description: {
-      ko: "React와 Redux를 사용한 할 일 관리 애플리케이션",
-      en: "Todo management application using React and Redux",
+      ko: "앱테크 환경 인식 개선 프로젝트",
+      en: "App technology environment enhancement project",
     },
     details: {
-      ko: "사용자가 할 일을 추가, 편집, 삭제하고 완료 상태를 관리할 수 있는 애플리케이션입니다. 로컬 스토리지를 사용하여 데이터를 저장합니다.",
-      en: "An application that allows users to add, edit, delete, and manage the completion status of todos. Uses local storage to persist data.",
+      ko: "앱에서 환경인식에 관련된 컨텐츠와 광고를 소비하면 앱내 경험치를 얻고, 일정 레벨에 도달하면 상품을 주는 앱테크입니다.",
+      en: "Users earn XP by viewing content and ads. Reach a level, get real rewards.",
     },
-    technologies: ["React", "Redux", "JavaScript", "CSS"],
-    githubFrontend: "https://github.com/username/todo-app",
-    site: "https://todo.example.com",
+    technologies: ["React", "Java", "SpringBoot", "MySQL", "JavaScript", "docker", "AWS"],
+    githubBackend: "https://github.com/swyp-lucky7/echo-eco",
+  },
+  {
+    id: 3,
+    title: {
+      ko: "Junlog dev",
+      en: "Junlog dev",
+    },
+    description: {
+      ko: "개인 테크 블로그",
+      en: "Personal tech blog",
+    },
+    details: {
+      ko: "V0 를 이용해 만든 서버리스 블로그입니다.",
+      en: "A serverless blog built with V0.",
+    },
+    technologies: ["React", "NextJs", "Postgresql"],
+    githubFrontend: "https://github.com/pkt369/junlog.dev",
+    site: "https://junlog.dev",
   },
 ]
