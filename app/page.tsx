@@ -88,6 +88,24 @@ function FeaturedPosts() {
       tags: ["structure", "spring boot", "service", "repository", "java"],
       slug: "service-vs-repository",
     },
+    {
+      id: "3",
+      title: {
+        ko: "Ubunutu 에 Netdata 세팅하고 슬랙에 메세지 보내기",
+        en: "Setting Up Netdata on Ubuntu with Slack",
+      },
+      excerpt: {
+        ko: "Netdata 에서 메모리와 CPU 모니터링을 하고 임계점에 올 경우 Slack 으로 메세지 보내는 방법에 대해 알아보겠습니다.",
+        en: "Monitor memory and CPU with Netdata and send alerts to Slack when usage exceeds limits.",
+      },
+      date: "2025-06-13",
+      category: {
+        ko: "Infra",
+        en: "Infra",
+      },
+      tags: ["Infra", "Netdata", "Slack", "Memory", "CPU", "Ubuntu"],
+      slug: "setting-up-netdata",
+    },
   ]
 
   return (

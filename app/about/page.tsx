@@ -49,6 +49,7 @@ export default function AboutPage() {
             <p>
               <TranslatedText id="about.bio.p1" />
             </p>
+            <br/>
             <p>
               <TranslatedText id="about.bio.p2" />
             </p>
