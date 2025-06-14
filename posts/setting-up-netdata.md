@@ -132,7 +132,7 @@ sudo nano /etc/netdata/health_alarm_notify.conf
 이렇게 하면 파일이 새롭게 생기고, nano 명령어를 통해 내부를 수정할 수 있습니다.
 <b>Ctrl + W</b> 명령어로 <b>SLACK_WEBHOOK_URL</b> 을 검색해줍니다.
 
-<b>SLACK_WEBHOOK_URL 에 이제 이전에 슬랙에서 받았던 webhook 을 넣어줍니다.</b>
+<b>SLACK_WEBHOOK_URL 에 이제 이전에 슬랙에서 받았던 webhook 을 넣어주고,</b>
 <b>DEFAULT_RECIPIENT_SLACK 에는 webhook 에 설정했던 채널을 넣어줍니다.</b>
 
 다하면 다음과 같습니다.
@@ -143,10 +143,10 @@ sudo nano /etc/netdata/health_alarm_notify.conf
 
 <br>
 
-다음과 같이 작성하고나서 <b>Ctrl + O 로 저장하고, Ctrl + X 로 나와줍니다.</b>
-이후 `sudo systemctl restart netdata` 서버를 재실행을 시켜줍니다.
+다음과 같이 작성하고나서 <b>Ctrl + O 로 저장하고, Ctrl + X 로 나와</b>
+`sudo systemctl restart netdata` 서버를 재실행을 시켜줍니다.
 
-이후 다음 명령어로 테스트를 진행하면 슬랙으로 메세지가 오게 됩니다.
+아래의 명령어로 테스트를 진행하면 슬랙으로 메세지가 오게 됩니다.
 ```bash
 sudo /usr/libexec/netdata/plugins.d/alarm-notify.sh test slack
 ```
@@ -166,7 +166,7 @@ https://learn.netdata.cloud/docs/alerts-&-notifications/alert-configuration-refe
 
 <br>
 
-공식문서에 따르면 health.d/ram-usage.conf 파일을 만들어야된다고 나와있습니다.
+공식문서에 따르면 health.d/ram-usage.conf 파일을 만들어야된다고 나와있었고,
 
 저의 경우 <b>/etc/netdata/health.d/ram-usage.conf</b> 에 파일을 만들었으며 명령어는 다음과 같습니다.
 
