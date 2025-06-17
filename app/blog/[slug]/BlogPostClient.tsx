@@ -132,7 +132,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
               // 코드 블록을 별도의 React Fragment로 감싸서 반환합니다
               return (
                 <>
-                  <div className="relative my-6 bg-[#2d2d2d] rounded-lg overflow-hidden">
+                  <div className="relative my-3 bg-[#2d2d2d] rounded-lg overflow-hidden">
                     <div className="flex items-center justify-between px-4 py-2 text-gray-200">
                       <div className="text-xs font-medium">{lang}</div>
                       <button

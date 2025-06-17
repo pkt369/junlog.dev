@@ -106,6 +106,24 @@ function FeaturedPosts() {
       tags: ["Infra", "Netdata", "Slack", "Memory", "CPU", "Ubuntu"],
       slug: "setting-up-netdata",
     },
+    {
+      id: "4",
+      title: {
+        ko: "Ubuntu 환경에서 도커로 Log Server 세팅하기",
+        en: "Setting Up Log Server using Docker on Ubuntu",
+      },
+      excerpt: {
+        ko: "Docker compose 를 이용해 Vector + Clickhouse + Grafana 조합으로 Log Sever 구축하기",
+        en: "Setting Up a Log Server with Vector, Clickhouse, and Grafana using Docker Compose",
+      },
+      date: "2025-06-17",
+      category: {
+        ko: "Infra",
+        en: "Infra",
+      },
+      tags: ["Infra", "Log", "Vector", "Clickhouse", "Grafana", "Docker", "Docker-Compose", "Ubuntu"],
+      slug: "setting-up-log-server",
+    },
   ]
 
   return (
