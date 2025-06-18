@@ -1,6 +1,6 @@
 ---
 title:
-  ko: "Grafana 를 이용해 Error 시 슬랙으로 에러 받기"
+  ko: "Grafana 를 이용해 에러 발생 시 슬랙으로 메세지 받기"
   en: "Receiving Slack Notifications for Errors using Grafana"
 excerpt:
   ko: "Grafana 의 Alerting 기능을 이용해 Slack 으로 메세지 받기"
