@@ -5,7 +5,7 @@ title:
 excerpt:
   ko: "Grafana 의 Alerting 기능을 이용해 Slack 으로 메세지 받기"
   en: "Receive Slack notifications using Grafana's Alerting feature"
-date: "2025-06-17"
+date: "2025-06-18"
 category:
   ko: "Infra"
   en: "Infra"

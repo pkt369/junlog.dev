@@ -124,6 +124,24 @@ function FeaturedPosts() {
       tags: ["Infra", "Log", "Vector", "Clickhouse", "Grafana", "Docker", "Docker-Compose", "Ubuntu"],
       slug: "setting-up-log-server",
     },
+    {
+      id: "5",
+      title: {
+        ko: "Grafana 를 이용해 Error 시 슬랙으로 에러 받기",
+        en: "Receiving Slack Notifications for Errors using Grafana",
+      },
+      excerpt: {
+        ko: "Grafana 의 Alerting 기능을 이용해 Slack 으로 메세지 받기",
+        en: "Receive Slack notifications using Grafana's Alerting feature",
+      },
+      date: "2025-06-18",
+      category: {
+        ko: "Infra",
+        en: "Infra",
+      },
+      tags: ["Infra", "Log", "Clickhouse", "Grafana", "Slack", "Alert"],
+      slug: "setting-up-grafana-slack",
+    },
   ]
 
   return (
