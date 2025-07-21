@@ -142,6 +142,24 @@ function FeaturedPosts() {
       tags: ["Infra", "Log", "Clickhouse", "Grafana", "Slack", "Alert"],
       slug: "setting-up-grafana-slack",
     },
+    {
+      id: "6",
+      title: {
+        ko: "MeiliSearch 사용 후기: 적은 메모리로 검색 기능 구현하기",
+        en: "Our MeiliSearch Experience: Building Fast Search on Low-Memory Servers",
+      },
+      excerpt: {
+        ko: "한글을 지원하는 MeiliSearch 로 적은 메모리로 검색을 구현한 후기",
+        en: "Building a Korean-Capable Search System with MeiliSearch on a Low-Memory Server",
+      },
+      date: "2025-07-20",
+      category: {
+        ko: "Backend",
+        en: "Backend",
+      },
+      tags: ["Search", "Database", "Spring Boot", "Docker", "Java"],
+      slug: "search-meilisearch",
+    },
   ]
 
   return (
