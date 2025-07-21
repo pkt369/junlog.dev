@@ -62,15 +62,15 @@ function ProjectCard({ project }: { project: Project }) {
               </Link>
             </Button>
           )}
-        </div>
-        {project.site && (
-          <Button size="sm" className="w-full sm:w-auto" asChild>
+          {project.site && (
+          <Button size="sm" className="flex-grow sm:flex-grow-0" asChild>
             <Link href={project.site} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="h-4 w-4 mr-2" />
               Site
             </Link>
           </Button>
         )}
+        </div>
       </CardFooter>
     </Card>
   )
@@ -166,5 +166,22 @@ const projects: Project[] = [
     technologies: ["React", "NextJs", "Postgresql"],
     githubFrontend: "https://github.com/pkt369/junlog.dev",
     site: "https://junlog.dev",
+  },
+  {
+    id: 4,
+    title: {
+      ko: "Senagg",
+      en: "Senagg",
+    },
+    description: {
+      ko: "세븐 나이츠 커뮤니티 플랫폼",
+      en: "Seven Knights Community Platform",
+    },
+    details: {
+      ko: "친구들과 함께 개발한 세븐 나이츠 커뮤니티 플랫폼입니다.",
+      en: "A community platform for Seven Knights developed with friends.",
+    },
+    technologies: ["React", "NextJs", "Mysql", "Spring Boot", "Java", "docker", "MeiliSearch", "VPS"],
+    site: "https://sena.gg",
   },
 ]
