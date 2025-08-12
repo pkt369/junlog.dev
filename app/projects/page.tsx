@@ -184,4 +184,21 @@ const projects: Project[] = [
     technologies: ["React", "NextJs", "Mysql", "Spring Boot", "Java", "docker", "MeiliSearch", "VPS"],
     site: "https://sena.gg",
   },
+  {
+    id: 5,
+    title: {
+      ko: "hangout",
+      en: "hangout",
+    },
+    description: {
+      ko: "영어 회화 문제 추천 서비스",
+      en: "English conversation questions recommendation service",
+    },
+    details: {
+      ko: "meetup 에서 영어 회화를 할수 있게 도와주는 서비스입니다.",
+      en: "A service that helps you practice English conversation with meetup.",
+    },
+    technologies: ["React", "NextJs", "Postgres", "NestJS", "docker", "VPS"],
+    site: "https://hangout.datasurfing.app",
+  },
 ]
