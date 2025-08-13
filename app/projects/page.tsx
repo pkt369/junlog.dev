@@ -198,7 +198,7 @@ const projects: Project[] = [
       ko: "meetup 에서 영어 회화를 할수 있게 도와주는 서비스입니다.",
       en: "A service that helps you practice English conversation with meetup.",
     },
-    technologies: ["React", "NextJs", "Postgres", "NestJS", "docker", "VPS"],
+    technologies: ["React", "NextJs", "Postgres", "NestJS", "docker", "VPS", "Redis", "Nginx"],
     site: "https://hangout.datasurfing.app",
   },
 ]
