@@ -72,4 +72,4 @@ export default function AboutPage() {
   )
 }
 
-const skills = ["React", "Next.js", "TypeScript", "JavaScript", "HTML", "CSS", "Tailwind CSS", "Node.js", "Git"]
+const skills = ["Java", "Spring boot", "React", "Next.js", "NestJS", "TypeScript", "JavaScript", "Node.js", "Docker", "MySQL", "PostgreSQL", "Git"]

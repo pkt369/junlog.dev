@@ -76,14 +76,18 @@ const translations = {
     en: "Introduction",
   },
   "about.bio.p1": {
-    ko: "스타트업, 개인 프로젝트 등에서 소프트웨어 엔지니어로 일하고 있습니다. AI 를 활용해서 개발을 하고 있으며, ",
-    en: "I'm a software engineer working in startups and personal projects.",
+    ko: "저는 Software Engineer 로 일하며, 풀스택 경험을 보유하고 있습니다.",
+    en: "I'm a software engineer with full-stack experience.",
   },
   "about.bio.p2": {
     ko: `개발과 새로운 기술을 배우는 것을 좋아합니다. 특히 새로운 AI 써보는 것을 좋아하여 여러 프로젝트들을 여러 AI 들과 함께 진행하고 있습니다.
-        또한 AI 를 이용만 하는게 아닌 항상 어떻게 동작하는지 알고 정확히 알고 사용을 하는 것을 목표로 하고 있습니다.`,
+        또한 AI 를 이용만 하는게 아닌 항상 어떻게 동작하는지 알고 정확히 알고 사용을 하는 것을 목표로 하고 있습니다.
+        
+        개발을 할때는 근거를 먼저 찾고 근거에 따라 개발하는 것이 저의 개발 철학입니다.`,
     en: `I enjoy development and learning new technologies. In particular, I like exploring and using the latest AI tools in various projects. 
-        Rather than just using AI, I always aim to understand how it works and ensure I fully grasp the code it generates.`,
+        Rather than just using AI, I always aim to understand how it works and ensure I fully grasp the code it generates.
+
+        My development philosophy is to first find the rationale and then develop based on that foundation.`,
   },
   "about.skills.title": {
     ko: "기술",
