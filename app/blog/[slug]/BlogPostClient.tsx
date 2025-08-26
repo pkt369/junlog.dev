@@ -98,13 +98,14 @@ export default function BlogPostClient({ post }: { post: Post }) {
             h2: ({ node, ...props }) => (
               <h2 className="text-3xl font-bold mt-8 mb-4 pb-1 border-b border-muted" {...props} />
             ),
-            h3: ({ node, ...props }) => <h3 className="text-2xl font-bold mt-6 mb-3" {...props} />,
-            h4: ({ node, ...props }) => <h4 className="text-xl font-semibold mt-6 mb-3" {...props} />,
+            h3: ({ node, ...props }) => <h3 className="text-2xl font-bold mt-4 mb-3" {...props} />,
+            h4: ({ node, ...props }) => <h4 className="text-xl font-semibold mt-4 mb-3" {...props} />,
             h5: ({ node, ...props }) => <h5 className="text-lg font-semibold mt-4 mb-2" {...props} />,
             h6: ({ node, ...props }) => <h6 className="text-base font-semibold mt-4 mb-2" {...props} />,
             // Image styles
             img: ({ node, ...props }) => (
-              <img className="rounded-lg mx-auto my-4 shadow-md" {...props} alt={props.alt || "Blog image"} />
+              <img className="rounded-lg mx-auto my-4 shadow-md" {...props} alt={props.alt || "Blog image"} 
+              style={props.height ? { height: props.height } : undefined}/>
             ),
             // Link styles
             a: ({ node, ...props }) => (
@@ -115,12 +116,15 @@ export default function BlogPostClient({ post }: { post: Post }) {
                 rel="noopener noreferrer"
               />
             ),
-            code: ({ node, inline, className, children, ...props }: any) => {
+            code: ({ node, className, children, ...props }: any) => {
               const match = /language-(\w+)/.exec(className || "")
               const lang = match ? match[1] : ""
               const codeText = String(children).replace(/\n$/, "")
+              const isInline =
+                node.position &&
+                node.position.start.line === node.position.end.line;
 
-              if (inline) {
+              if (isInline) {
                 return (
                   <code className="inline-code" {...props}>
                     {children}
@@ -174,7 +178,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
             ),
             // Table styles
             table: ({ node, ...props }) => (
-              <div className="overflow-x-auto my-6">
+              <div className="overflow-x-auto my-3">
                 <table className="w-full border-collapse" {...props} />
               </div>
             ),
