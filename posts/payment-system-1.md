@@ -1,11 +1,11 @@
 ---
 title:
   ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (1)"
-  en: "Building a Payment System That Handles 2,000 Transactions Per Second (Part 1)"
+  en: "Handling 2,000 TPS: Payment System (Part 1)"
 excerpt:
   ko: "아직 최적화 전 상태에서 시스템이 얼마나 트래픽을 견디는지 테스트하고, 왜 아키텍처를 공부해야 하는지 알아보겠습니다."
   en: "We will test how much traffic the system can handle in its unoptimized state and explore why studying the architecture is important."
-date: "2025-08-24"
+date: "2025-08-23"
 category:
   ko: "Backend"
   en: "Backend"
@@ -87,8 +87,9 @@ TPS는 100, 1000, 2,000 순으로 테스트했으며, 1분 기준 최대 2,000 T
 
 전체 소스 코드는 Git 에 올려두었으니 궁금하신 경우 참고해주세요.
 참고) https://github.com/pkt369/blog-payment-txn
+브랜치는 v1 으로 변경해서 참고해주세요! 
 
-먼저 메인 로직에는 **Thread.sleep(0.3초)** 를 이용해서 결제 걸리는 시간을 구현하였습니다.
+먼저 메인 로직에는 **Thread.sleep(1초)** 를 이용해서 결제 걸리는 시간을 구현하였습니다.
 또 성공/실패 비율 (99% 성공, 1% 실패) 을 구현해두었습니다.
 
 테스트는 k6 를 이용하기 위해 test-script.js 를 구현해 두었고, init.sql 을 통해 도커로 Postgres 생성시 테이블 생성 및 user 정보를 초기화 하도록 하였습니다.
@@ -142,43 +143,39 @@ docker compose run --rm k6 run /scripts/test-script.js
 ```
 
 ## TPS 100
-### 실행전
-<img src="/payment-system-1/tps-100-before.png" alt="tps-100-before" align="center" />
 
-### 실행 후
 <img src="/payment-system-1/tps-100-after.png" alt="tps-100-after" align="center" />
 
-### k6 결과
 <img src="/payment-system-1/tps-100-result.png" alt="tps-100-result" align="center" />
 
-정리하면 메모리는 많이 사용하는 구간이 없어 200MB 정도 사용했으며, CPU 는 최대 45% 정도 사용했습니다.
-<b>평균 응답 시간: 약 307ms</b> 으로 꽤 안정적을 잘 돌아간 것을 볼 수 있습니다.
-
-DB 또는 네트워크에 병목 구간은 없었습니다.
+<b>평균 응답 시간은 1.53초였고, 초당 처리된 요청(TPS)은 약 95.6</b>으로 설정한 100 TPS와 거의 일치했습니다.
+하지만 일부 요청은 처리되지 않아 <b>116개의 dropped 요청이 발생</b>했습니다.
+이미 100 TPS 기준인데도 드롭이 발생한 것을 보면, 이 뒤 테스트에서도 많은 요청들이 처리되지 않을 것을 알 수 있습니다.
 
 <br>
 
 ## TPS 1,000
 
-실행시 병목 구간이 생겼습니다.
 <img src="/payment-system-1/tps-1000-bottleneck.png" alt="tps-1000-bottleneck" align="center" />
-
-drop 부분을 보면 <b>VU 가 38401 개가 요청을 생성하지 못했고</b>, <b>Iteration duration이 평균 5.56초로 하나의 VU 를 처리하는데 0.3 초에서 5초로 급격하게 늘어났습니다.</b>
-즉, 요청 처리 속도가 느려 TPS 를 제대로 처리하고 있지않음을 확인하였습니다.
 
 <img src="/payment-system-1/tps-1000-after.png" alt="tps-1000-after" align="center" />
 
-반면에 cpu 는 30프로만 사용하는 것을 볼 수가 있는데 이유는 서버측에서 한정된 풀 때문에 많은 작업이 일어나더라도 다 처리하지 못하기 때문입니다.
+이번 테스트에서는 평균 응답 시간이 **17.19초**로 크게 늘어났고, **초당 처리된 요청(TPS)은 약 99.4**였습니다.
+설정한 1,000 TPS에 전혀 못믿치는 결과였고, **총 52,100개의 dropped 요청**이 발생하여 서버가 대부분의 요청을 처리하지 못한 상황임을 알 수 있었습니다.
+
+한정적인 커넥션 풀때문에 Request 요청 평균 시간도 약 **17초로 지연**이 크게 발생했습니다.
 
 <br>
 
 ## TPS 2,000
-예상했듯이 병목 구간이 똑같은 이유로 생겨났습니다.
 <img src="/payment-system-1/tps-2000-after.png" alt="tps-2000-after" align="center" />
 <img src="/payment-system-1/tps-2000-bottleneck.png" alt="tps-2000-bottleneck" align="center" />
 
-<b>평균 응답 시간이 10.65초로 100 TPS 기준보다 30배 이상 느려진 것을 볼 수 있습니다.
-drop 된 갯수도 96402 개로 매우 많은 것을 볼 수 있습니다. </b>
+이번 테스트에서는 **평균 응답 시간이 30.12초**로 매우 길게 나왔습니다.
+**초당 처리된 요청(TPS)은 약 98.9**로 이전 테스트들과 크게 다르지 않았습니다.
+**총 110,104개의 request 가 드롭**되어 서버가 대부분의 요청을 처리하지 못했습니다.
+
+네트워크 트래픽은 크지 않아, 문제의 **주 원인은 서버와 데이터베이스의 처리 한계**임을 알 수 있습니다.
 
 <br>
 
@@ -263,7 +260,7 @@ The folder structure is as follows:
 
 The full source code is available on [GitHub Repository](https://github.com/pkt369/blog-payment-txn) if you’d like to take a closer look.
 
-To simulate real-world payment processing, the **main logic** introduces a small delay of **0.3 seconds** per transaction using `Thread.sleep(0.3s)`. This represents the typical processing time of a payment gateway.
+To simulate real-world payment processing, the **main logic** introduces a small delay of **1 seconds** per transaction using `Thread.sleep(1s)`. This represents the typical processing time of a payment gateway.
 
 For load testing, we prepared a `test-script.js` for **k6**, and `init.sql` automates the database setup by initializing tables and user data, allowing the simulation to run immediately.
 
@@ -316,45 +313,39 @@ docker compose run --rm k6 run /scripts/test-script.js
 ```
 
 ## TPS 100
-### Test Before
-<img src="/payment-system-1/tps-100-before.png" alt="tps-100-before" align="center" />
-
-### Test After
 <img src="/payment-system-1/tps-100-after.png" alt="tps-100-after" align="center" />
 
-### k6 Result
 <img src="/payment-system-1/tps-100-result.png" alt="tps-100-result" align="center" />
 
 
-In summary, the system did not use much memory, consuming around 200 MB, and <b>CPU usage peaked at about 45%.</b>
-<b>The average response time was approximately 307 ms</b>, indicating stable performance.  
-No bottlenecks were observed in either the database or the network.
+**The average response time was 1.53 seconds**, and the **TPS was about 95.6**, almost matching the target of 100 TPS.
+However, some requests failed, with **116 iterations dropped**.
+Even at 100 TPS, dropped requests occurred, indicating that higher TPS tests would likely result in even more dropped requests.
 
 <br>
 
 ## TPS 1,000
 
-In this case, it caused a performance bottleneck.
 <img src="/payment-system-1/tps-1000-bottleneck.png" alt="tps-1000-bottleneck" align="center" />
-
-In the drop section, <b>38,401 VUs failed to generate requests</b>, and the average iteration duration increased from 0.3 seconds to <b>5.56 seconds</b>.
-This indicates that the request processing speed slowed down, and the system was unable to sustain the target TPS.
 
 <img src="/payment-system-1/tps-1000-after.png" alt="tps-1000-after" align="center" />
 
-In the CPU section, we can see that usage remained at only 30%.  
-The reason is that the server could not process all requests due to the limited connection pool.
+In this test, the average response time increased significantly to **17.19 seconds**, while the **TPS was about 99.4**.
+The target of 1,000 TPS was far from being reached, and **52,100 iterations were dropped**, showing that the server could not handle most of the requests.
+
+Due to the limited connection pool, **the average request time was delayed to around 17 seconds.**
 
 <br>
 
 ## TPS 2,000
-
-As expected, it caused the same performance bottleneck.
 <img src="/payment-system-1/tps-2000-after.png" alt="tps-2000-after" align="center" />
 <img src="/payment-system-1/tps-2000-bottleneck.png" alt="tps-2000-bottleneck" align="center" />
 
-<b>The average response time jumped to 10.65 seconds</b>, which means it is over <b>30 times</b> slower than the 100 TPS baseline.
-On top of that, a huge number of requests were dropped: <b>96,402 in total.</b>
+In this test, **the average response time reached 30.12 seconds**, which is extremely high.
+The **TPS was about 98.9**, similar to the previous tests.
+**A total of 110,104 requests were dropped**, showing that the server could not handle the majority of incoming requests.
+
+Network traffic was not significant, indicating that the **main bottleneck was the server and database processing limits.**
 
 When running a real service, even a single failed request can be a big deal.  
 So in the next post, we’ll take a look at how to improve the system to make sure every request succeeds.
