@@ -80,14 +80,18 @@ TPS는 100, 1000, 2,000 순으로 테스트했으며, 1분 기준 최대 2,000 T
 
 <br>
 
-# Server 코드 작성 및 세팅하기
+# System Architecture
+처음에는 단일 서버가 모든 요청을 처리하는 구조입니다.
+<img src="/payment-system-1/tps-architecture-1.png" alt="tps-architecture-1" align="center" height="400" />
+
+<br>
+
+# 서버 코드 작성 및 설정
 
 파일 구조는 다음과 같습니다.
 <img src="/payment-system-1/folder-structure.png" alt="folder-structure" align="center" height="400" />
 
-전체 소스 코드는 Git 에 올려두었으니 궁금하신 경우 참고해주세요.
-참고) https://github.com/pkt369/blog-payment-txn
-브랜치는 v1 으로 변경해서 참고해주세요! 
+전체 소스 코드는 [Git](https://github.com/pkt369/blog-payment-txn/tree/v1) 에 올려두었으니 궁금하신 경우 참고해주세요.
 
 먼저 메인 로직에는 **Thread.sleep(1초)** 를 이용해서 결제 걸리는 시간을 구현하였습니다.
 또 성공/실패 비율 (99% 성공, 1% 실패) 을 구현해두었습니다.
@@ -97,8 +101,8 @@ TPS는 100, 1000, 2,000 순으로 테스트했으며, 1분 기준 최대 2,000 T
 
 <br>
 
-그리고 application.properties 에서는 커넥션 풀은 100개, 최대 웨이팅 시간은 30초로 제한을 두었습니다.
-명시하진 않았지만 톰켓의 기본 커넥션 값인 200개를 사용하였습니다.
+그리고 application.properties 에서는 **커넥션 풀은 100개, 최대 웨이팅 시간은 30초로 제한**  을 두었습니다.
+명시하진 않았지만 **서버의 커넥션 풀은 톰켓의 기본 커넥션 값인 200개**를 사용하였습니다.
 
 ```properties
 # Maximum number of connections in the pool
@@ -133,7 +137,7 @@ tps_100: {
 <br>
 
 # 테스트하기
-build 는 app 을 수정했을때 실행해주시면 됩니다.
+테스트를 하기전에 수정한 코드가 있으면 build 명령어를 먼저 사용해주시면 됩니다.
 docker compose up -d 를 실행하면 k6 가 명령이 없어 자동으로 종료됩니다. 테스트할때 run 명령어로 다시 실행해야 합니다.
 
 ```bash
@@ -250,6 +254,12 @@ During testing, Memory, CPU, server status, and successful processing were caref
 | type      | VARCHAR(50)    | Transaction type (CREATE_PAYMENT, REFUND, CANCEL) |
 | created_at| TIMESTAMP      | Transaction creation date |
 | updated_at| TIMESTAMP      | Last status update |
+
+<br>
+
+# System Architecture
+Initially, a single server handled all incoming requests.
+<img src="/payment-system-1/tps-architecture-1.png" alt="tps-architecture-1" align="center" height="400" />
 
 <br>
 
