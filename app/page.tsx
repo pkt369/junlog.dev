@@ -53,22 +53,40 @@ function HeroSection() {
 function FeaturedPosts() {
   const posts = [
     {
-      id: "1",
+      id: "0",
       title: {
-        ko: "기본 로그인 구현 with Jwt token",
-        en: "Implement Default Login with Jwt token",
+        ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (1)",
+        en: "Handling 2,000 TPS: Payment System (Part 1)"
       },
       excerpt: {
-        ko: "어떻게 로그인을 구현하고 Jwt 로 통신하는지에 대해 알아보겠습니다.",
-        en: "Let's learn how to implement login logic using JWT.",
+        ko: "아직 최적화 전 상태에서 시스템이 얼마나 트래픽을 견디는지 테스트하고, 왜 아키텍처를 공부해야 하는지 알아보겠습니다.",
+        en: "We will test how much traffic the system can handle in its unoptimized state and explore why studying the architecture is important."
       },
-      date: "2025-04-28",
+      date: "2025-08-23",
       category: {
         ko: "Backend",
         en: "Backend",
       },
-      tags: ["Jwt", "login", "spring boot", "react", "typescript", "java"],
-      slug: "default-login-with-jwt",
+      tags: ["Architecture", "Trafic", "Java", "Spring Boot"],
+      slug: "payment-system-1"
+    },
+    {
+      id: "1",
+      title: {
+        ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (2)",
+        en: "Handling 2,000 TPS: Payment System (Part 2)"
+      },
+      excerpt: {
+        ko: "모든 TPS 안정적으로 받기 위해 어떻게 개선할 수 있는지 시스템 아키텍처 개선으로 알아보겠습니다.",
+        en: "Let’s explore how to improve the system architecture to handle all TPS stably."
+      },
+      date: "2025-08-27",
+      category: {
+        ko: "Backend",
+        en: "Backend"
+      },
+      tags: ["Architecture", "Trafic", "Java", "Spring Boot", "Connection Pool", "Kafka"],
+      slug: "payment-system-2"
     },
     {
       id: "2",
@@ -91,24 +109,6 @@ function FeaturedPosts() {
     {
       id: "3",
       title: {
-        ko: "Ubunutu 에 Netdata 세팅하고 슬랙에 메세지 보내기",
-        en: "Setting Up Netdata on Ubuntu with Slack",
-      },
-      excerpt: {
-        ko: "Netdata 에서 메모리와 CPU 모니터링을 하고 임계점에 올 경우 Slack 으로 메세지 보내는 방법에 대해 알아보겠습니다.",
-        en: "Monitor memory and CPU with Netdata and send alerts to Slack when usage exceeds limits.",
-      },
-      date: "2025-06-13",
-      category: {
-        ko: "Infra",
-        en: "Infra",
-      },
-      tags: ["Infra", "Netdata", "Slack", "Memory", "CPU", "Ubuntu"],
-      slug: "setting-up-netdata",
-    },
-    {
-      id: "4",
-      title: {
         ko: "Ubuntu 환경에서 도커로 Log Server 세팅하기",
         en: "Setting Up Log Server using Docker on Ubuntu",
       },
@@ -125,7 +125,7 @@ function FeaturedPosts() {
       slug: "setting-up-log-server",
     },
     {
-      id: "5",
+      id: "4",
       title: {
         ko: "Grafana 를 이용해 에러 발생 시 슬랙으로 메세지 받기",
         en: "Receiving Slack Notifications for Errors using Grafana",
@@ -143,7 +143,7 @@ function FeaturedPosts() {
       slug: "setting-up-grafana-slack",
     },
     {
-      id: "6",
+      id: "5",
       title: {
         ko: "MeiliSearch 사용 후기: 적은 메모리로 검색 기능 구현하기",
         en: "Our MeiliSearch Experience: Building Fast Search on Low-Memory Servers",
