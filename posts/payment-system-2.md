@@ -145,7 +145,7 @@ public String createTransaction(TransactionRequest request) {
 
 **성공적으로 120,000 개의 메세지 소비를 완료하였고, 동기 방식으로 동작할때 보다 서버의 안정성이 올라갔습니다!**
 
-하지만 **4분이라고 예측했지만 실제로는 25분** 가까이 걸렸습니다.
+하지만 **4분이라고 예측했지만 실제로는 30분** 가까이 걸렸습니다.
 왜냐하면 **컨슈머와 파티션을 늘려도 Hikari Pool(데이터베이스 Pool)이 늘지 않았기 때문입니다.**
 다음 시리즈에서는 데이터베이스 풀을 늘려 컨슈머 소비속도를 높혀 빠르게 응답하도록 해보겠습니다.
 
@@ -316,7 +316,7 @@ Due to the limitations of the local environment, we will start by increasing the
 
 **We successfully processed all 120,000 messages, and the server’s stability improved compared to the synchronous approach!**
 
-However, although we expected it to take 4 minutes, it actually took nearly **25 minutes.**
+However, although we expected it to take 4 minutes, it actually took nearly **30 minutes.**
 This was because **increasing consumers and partitions did not increase the Hikari connection pool (database pool).**
 
 In the next series, we plan to increase the database pool to improve consumer throughput and achieve faster responses.
