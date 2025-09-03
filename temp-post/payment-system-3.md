@@ -74,6 +74,7 @@ Producer와 Consumer를 동시에 실행해서 발생한 현상으로 보이며,
 <br>
 
 # 샤딩
+```sql
 docker exec -it payment-citus-coordinator psql -U postgres -d payment_db
 SELECT citus_set_coordinator_host('postgres-coordinator');
 
@@ -82,10 +83,8 @@ SELECT master_add_node('postgres-worker2', 5432);
 SELECT master_add_node('postgres-worker3', 5432);
 SELECT master_add_node('postgres-worker4', 5432);
 SELECT master_add_node('postgres-worker5', 5432);
-이 포스팅은 결제 시스템의 대규모 데이터 처리를 위해 샤딩을 도입한 후 성능이 어떻게 개선되었는지, 그리고 상황에 맞는 기술 선택의 중요성에 초점을 맞췄습니다.
+```
 
-PostgreSQL과 Citus를 검토했지만, ARM64 맥북 환경에서의 지원 부족과 복잡한 설정 때문에 **CockroachDB를 선택**했습니다.
-샤딩 후 결제 처리량을 비교하여, 전체 시간을 어떻게 줄였는지 알아보겠습니다.
 
 ## Code
 [docker-compose.yml](https://github.com/pkt369/blog-payment-txn/blob/v3/docker-compose.yml) 에서 확인 할 수 있습니다.
