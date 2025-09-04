@@ -74,6 +74,7 @@ Producer와 Consumer를 동시에 실행해서 발생한 현상으로 보이며,
 <br>
 
 # 샤딩
+샤딩은 citus 로 구현하였으며, 총 5개의 데이터베이스로 나누어 `user_id` 로 분리하여 넣었습니다.
 ```sql
 docker exec -it payment-citus-coordinator psql -U postgres -d payment_db
 SELECT citus_set_coordinator_host('postgres-coordinator');
@@ -84,6 +85,7 @@ SELECT master_add_node('postgres-worker3', 5432);
 SELECT master_add_node('postgres-worker4', 5432);
 SELECT master_add_node('postgres-worker5', 5432);
 ```
+
 
 
 ## Code
