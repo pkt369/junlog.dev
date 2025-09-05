@@ -75,6 +75,10 @@ Producer와 Consumer를 동시에 실행해서 발생한 현상으로 보이며,
 
 # 샤딩
 샤딩은 citus 로 구현하였으며, 총 5개의 데이터베이스로 나누어 `user_id` 로 분리하여 넣었습니다.
+
+## Code
+[docker-compose.yml](https://github.com/pkt369/blog-payment-txn/blob/v3/docker-compose.yml) 에서 확인 할 수 있습니다.
+
 ```sql
 docker exec -it payment-citus-coordinator psql -U postgres -d payment_db
 SELECT citus_set_coordinator_host('postgres-coordinator');
@@ -86,13 +90,7 @@ SELECT master_add_node('postgres-worker4', 5432);
 SELECT master_add_node('postgres-worker5', 5432);
 ```
 
-
-
-## Code
-[docker-compose.yml](https://github.com/pkt369/blog-payment-txn/blob/v3/docker-compose.yml) 에서 확인 할 수 있습니다.
-
-좀 더 드라마틱한 성능 개선을 위해서 샤딩을 적용했습니다. 즉, 쓰기 디비를 늘려 더 줄여보았습니다.
-이번 테스트의 목표는 1분이내로 잡아보겠습니다.
+이후 명령어로 메인 node 로 다른 데이터베이스로 연결해주어야 합니다.
 
 
 이전에는 500개로 잡았고, 예측한 시간은 4분이었지만 30분이 걸렸습니다.
