@@ -79,16 +79,46 @@ Producer와 Consumer를 동시에 실행해서 발생한 현상으로 보이며,
 ## Code
 [docker-compose.yml](https://github.com/pkt369/blog-payment-txn/blob/v3/docker-compose.yml) 에서 확인 할 수 있습니다.
 
+docker compose up -d 를 명령어를 이용해 실행시키고 다음과 같이 메인 노드와 샤딩된 노드들을 이어주어야 합니다.
+아래의 명령어로 이어줍니다.
+
+```sql
+docker exec -it payment-citus-coordinator bash
+
+cd /var/lib/postgresql
+
+echo "postgres-worker1:5432:*:postgres:postgres" >> ~/.pgpass
+echo "postgres-worker2:5432:*:postgres:postgres" >> ~/.pgpass
+echo "postgres-worker3:5432:*:postgres:postgres" >> ~/.pgpass
+echo "postgres-worker4:5432:*:postgres:postgres" >> ~/.pgpass
+echo "postgres-worker5:5432:*:postgres:postgres" >> ~/.pgpass
+
+-- PostgreSQL 이 0600이 아니면 무시함
+chmod 0600 ~/.pgpass
+
+-- 도커에서 나와 테스트
+docker exec -it payment-citus-coordinator psql -U postgres -d payment_db -h postgres-worker1 -c "SELECT 1;"
+```
+위 테스트에서 비밀번호가 없이 성공한다면 연결이 된 것 입니다.
+
+이제 코디네이터 노드에서 클러스터 설정을 해줍니다.
+
 ```sql
 docker exec -it payment-citus-coordinator psql -U postgres -d payment_db
-SELECT citus_set_coordinator_host('postgres-coordinator');
 
-SELECT master_add_node('postgres-worker1', 5432);
-SELECT master_add_node('postgres-worker2', 5432);
-SELECT master_add_node('postgres-worker3', 5432);
-SELECT master_add_node('postgres-worker4', 5432);
-SELECT master_add_node('postgres-worker5', 5432);
+SELECT citus_set_coordinator_host('postgres-coordinator', 5432);
+
+SELECT citus_add_node('postgres-worker1', 5432);
+SELECT citus_add_node('postgres-worker2', 5432);
+SELECT citus_add_node('postgres-worker3', 5432);
+SELECT citus_add_node('postgres-worker4', 5432);
+SELECT citus_add_node('postgres-worker5', 5432);
+
+SELECT * FROM pg_dist_node;
+SELECT * FROM citus_get_active_worker_nodes();
 ```
+
+
 
 이후 명령어로 메인 node 로 다른 데이터베이스로 연결해주어야 합니다.
 그럼 citus 가 메인 노드를 통해서 관리하게 됩니다.
