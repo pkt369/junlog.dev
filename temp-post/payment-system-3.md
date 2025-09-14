@@ -5,7 +5,7 @@ title:
 excerpt:
   ko: "컨슈머 처리 최적화: 빠른 결제를 위한 커넥션 풀 & 샤딩"
   en: "Optimizing Consumer Processing: Connection Pooling & Sharding for Faster Checkout"
-date: "2025-08-29"
+date: "2025-09-12"
 category:
   ko: "Backend"
   en: "Backend"
@@ -16,21 +16,23 @@ slug: "payment-system-3"
 [이전 포스팅](/blog/payment-system-2/) 에서는 비동기로 변환해 모든 요청을 drop 없이 처리할 수 있게 되었습니다.
 하지만 컨슈머에서 시간이 엄청 오래걸리는 것을 보았습니다.
 
-그 이유는 **데이터베이스 풀이 100개로 잡혀있었고 커넥션과 파티션을 500개로 잡아도 Hikari Pool 이 해당 설정을 못따라가는 것을 예측할 수 있었습니다.**
-따라서 다음 테스트는 커넥션풀을 **500개**로 늘리고, 테스트를 해보았습니다.
+그 이유는 **커넥션과 파티션을 500개로 잡아도 데이터베이스 풀이 100개이기 때문에 컨슈머가 기다려야하는 이슈가 있었습니다.**
+위 예측을 토대로 다음 테스트는 커넥션풀을 **500개**로 늘리고, 테스트를 해보았습니다.
 
 <br>
 
 # 커넥션 풀 늘리기
 Postgres 는 100개가 Default 값이라 properties 에 500 이라 적어도 max-connection 이 정해져 있기때문에 늘어나지 않습니다.
 참고) [docs.postgres.org](https://docs.postgrest.org/en/v12/references/connection_pool.html)
-따라서 Postgres 데이터베이스에서 설정값을 변경해주어야 합니다.
+
+따라서 Postgres 데이터베이스에서 설정값을 변경하였습니다.
 
 <br>
 
-변경하는 방법은 [Stackoverflow](https://stackoverflow.com/questions/30778015/how-to-increase-the-max-connections-in-postgres) 에서 확인했습니다. 저는 **max_connections** 변경과 함께 **shared_buffers, shm_size** 설정을 적용했습니다. (실서버에서는 PgBouncer를 사용하는 것이 더 효율적이라고 합니다.)
+[Stackoverflow](https://stackoverflow.com/questions/30778015/how-to-increase-the-max-connections-in-postgres) 를 참고하여 **max_connections** 변경과 함께 **shared_buffers, shm_size** 설정을 적용했습니다. (실서버에서는 PgBouncer를 사용하는 것이 더 효율적이라고 합니다.)
 
 shared_buffers 는 캐시 사용을 위한 메모리로, **시스템 메모리의 약 25%가 적당**하다고 합니다. 저는 나중에 샤딩을 생각하여 2G 를 적용하였습니다.
+
 또한 shm_size는 도커의 공유 메모리를 의미하며, 캐시 메모리가 늘어남에 따라 shm_size도 증가시켜야 합니다. shm_size보다 작으면 도커 컨테이너가 정상적으로 실행되지 않습니다.
 
 <br>
@@ -80,7 +82,6 @@ Producer와 Consumer를 동시에 실행해서 발생한 현상으로 보이며,
 [docker-compose.yml](https://github.com/pkt369/blog-payment-txn/blob/v3/docker-compose.yml) 에서 확인 할 수 있습니다.
 
 docker compose up -d 를 명령어를 이용해 실행시키고 다음과 같이 메인 노드와 샤딩된 노드들을 이어주어야 합니다.
-아래의 명령어로 이어줍니다.
 
 ```sql
 docker exec -it payment-citus-coordinator bash
@@ -118,34 +119,39 @@ SELECT * FROM pg_dist_node;
 SELECT * FROM citus_get_active_worker_nodes();
 ```
 
-
-
-이후 명령어로 메인 node 로 다른 데이터베이스로 연결해주어야 합니다.
-그럼 citus 가 메인 노드를 통해서 관리하게 됩니다.
+<br>
 
 ## 테스트
+### 1차
+5개 데이터베이스로 늘렸고, 컨슈머는 이전처럼 500으로 고정시켰습니다.
+<img src="/payment-system-3/tps-2000-1.png" alt="tps-2000-1" align="center" />
+<img src="/payment-system-3/tps-2000-1-success.png" alt="tps-2000-1-success" align="center" />
 
+성공적으로 모든 테스트가 끝났지만, **시간은 약 10분으로 이전과 비슷함을 볼 수 있었습니다.**
+예측했던 것과 달리 성능이 비슷하여 파티션과 컨슈머를 좀더 늘려서 테스트를 해보았습니다.
 
+<br>
 
-이전에는 500개로 잡았고, 예측한 시간은 4분이었지만 30분이 걸렸습니다.
-  sysctls:
-      kernel.shmmax: 8589934592
-  
-17:28 ~ 
+### 2차
+이번에는 **컨슈머 수와 파티션의 수를 1500개**로 늘려 테스트를 진행하였습니다.
+하지만 생각보다 오래걸렸고 **9분 21초**가 나왔습니다. 분석해보니 **200개부터 오래걸렸었는데 하나의 컨슈머가 처리 속도가 늦어 Hot Partition 가 일어난 문제**였습니다.
+확인해보니 실제 서버와 다르게 1분동안만 받다보니 파티션에 어떤건 0개, 어떤건 400개로 크게 불균형이 일어나 생긴 문제로 보였습니다.
 
+<br>
 
-# Trouble Shooting
+### 3차
+위에서 겪은 것을 토대로 아래 옵션을 properties 에 추가하였습니다.
+`spring.kafka.producer.properties.partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner`
+이 옵션을 추가하고 나서 0개인 파티션이 없어지고, 150개가 최대로 된 것을 볼 수 있었습니다.
 
-docker exec -it payment-citus-coordinator bash
+<img src="/payment-system-3/final-test.png" alt="final-test" align="center" />
 
-docker exec -it payment-citus-coordinator bash -c "echo 'postgres-worker1:5432:*:postgres:postgres
-postgres-worker2:5432:*:postgres:postgres
-postgres-worker3:5432:*:postgres:postgres
-postgres-worker4:5432:*:postgres:postgres
-postgres-worker5:5432:*:postgres:postgres' > ~/.pgpass && chmod 600 ~/.pgpass"
+드디어 예측한대로 **5분 이내**로 나왔습니다.
 
+<br>
 
-echo "postgres-worker5:5432:*:postgres:postgres" > ~/.pgpass
-chmod 600 ~/.pgpass
+# 정리
+위 테스트를 통해, 물리적 자원이 부족하면 처리 속도가 느려질 수 있음을 확인했습니다.
+따라서 데이터베이스 커넥션 풀을 늘려 컨슈머의 처리 속도를 개선하였고, 단일 데이터베이스로는 성능 한계가 나타나 샤딩을 통해 쓰기 처리 능력을 분산시켜 5분 이내 처리를 달성할 수 있었습니다.
 
 ---language-separator---
