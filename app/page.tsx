@@ -91,20 +91,20 @@ function FeaturedPosts() {
     {
       id: "2",
       title: {
-        ko: "Service vs Repository: Service 에서 어떤것을 사용해야 될까?",
-        en: "Service vs Repository: What Should You Use Inside?",
+        ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (3)",
+        en: "Handling 2,000 TPS: Payment System (Part 3)"
       },
       excerpt: {
-        ko: "Service에서 Service 와 Repository 둘 중 어떤 것을 호출해서 사용하는 게 좋은 구조인지 알아봅시다.",
-        en: "Let’s explore whether it’s better to call another Service or a Repository within a Service.",
+        ko: "컨슈머 처리 최적화: 빠른 결제를 위한 커넥션 풀 & 샤딩",
+        en: "Optimizing Consumer Processing: Connection Pooling & Sharding for Faster Checkout"
       },
-      date: "2025-05-11",
+      date: "2025-10-03",
       category: {
         ko: "Backend",
         en: "Backend",
       },
-      tags: ["structure", "spring boot", "service", "repository", "java"],
-      slug: "service-vs-repository",
+      tags: ["Architecture", "Traffic", "Java", "Spring Boot", "Connection Pool", "Kafka", "Sharding"],
+      slug: "payment-system-3"
     },
     {
       id: "3",
