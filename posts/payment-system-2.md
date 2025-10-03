@@ -9,7 +9,7 @@ date: "2025-08-27"
 category:
   ko: "Backend"
   en: "Backend"
-tags: ["Architecture", "Trafic", "Java", "Spring Boot", "Connection Pool", "Kafka", "Asynchronous"]
+tags: ["Architecture", "Traffic", "Java", "Spring Boot", "Connection Pool", "Kafka", "Asynchronous"]
 slug: "payment-system-2"
 ---
 

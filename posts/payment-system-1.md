@@ -9,7 +9,7 @@ date: "2025-08-23"
 category:
   ko: "Backend"
   en: "Backend"
-tags: ["Architecture", "Trafic", "Java", "Spring Boot"]
+tags: ["Architecture", "Traffic", "Java", "Spring Boot"]
 slug: "payment-system-1"
 ---
 
