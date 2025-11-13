@@ -18,6 +18,7 @@ import LikeButton from "@/components/like-button"
 import CommentList from "@/components/comments/comment-list"
 import Prism from "prismjs"
 import React from "react"
+import Mermaid from "@/components/mermaid"
 
 // 추가 언어 지원
 import "prismjs/components/prism-jsx"
@@ -130,6 +131,11 @@ export default function BlogPostClient({ post }: { post: Post }) {
                     {children}
                   </code>
                 )
+              }
+
+              // Mermaid 다이어그램 처리
+              if (lang === "mermaid") {
+                return <Mermaid chart={codeText} />
               }
 
               // 여기서 p 태그 안에 div가 들어가는 문제를 해결하기 위해
