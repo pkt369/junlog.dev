@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { supabase, hashPassword, verifyPassword } from "@/lib/supabase"
+import { hashPassword, isSupabaseConfigured, supabase, verifyPassword } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
@@ -37,7 +37,7 @@ interface Comment {
     is_private: boolean
     email?: string | null
     parent_id?: string | null
-    is_admin?: boolean
+    is_admin?: boolean | null
 }
 
 interface CommentListProps {
@@ -45,6 +45,14 @@ interface CommentListProps {
 }
 
 export default function CommentList({ postSlug }: CommentListProps) {
+    if (!isSupabaseConfigured) {
+        return null
+    }
+
+    return <ConfiguredCommentList postSlug={postSlug} />
+}
+
+function ConfiguredCommentList({ postSlug }: CommentListProps) {
     const [comments, setComments] = useState<Comment[]>([])
     const [newComment, setNewComment] = useState("")
     const [authorName, setAuthorName] = useState("")

@@ -2,10 +2,15 @@ import { createClient } from "@supabase/supabase-js"
 import type { Database } from "@/types/supabase"
 import { createHash } from "crypto"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ""
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
+
+export const supabase = createClient<Database>(
+    supabaseUrl || "https://placeholder.supabase.co",
+    supabaseAnonKey || "placeholder-anon-key",
+)
 
 // 해싱 함수 유지 (이전 코드에서 사용 중일 수 있음)
 export function hashPassword(password: string): string {

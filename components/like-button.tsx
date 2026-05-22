@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Heart } from "lucide-react"
-import { supabase } from "@/lib/supabase"
+import { isSupabaseConfigured, supabase } from "@/lib/supabase"
 import { useToast } from "@/hooks/use-toast"
 import { useLanguage } from "@/components/language-provider"
 import { v4 as uuidv4 } from "uuid"
@@ -13,6 +13,14 @@ interface LikeButtonProps {
 }
 
 export default function LikeButton({ postSlug }: LikeButtonProps) {
+    if (!isSupabaseConfigured) {
+        return null
+    }
+
+    return <ConfiguredLikeButton postSlug={postSlug} />
+}
+
+function ConfiguredLikeButton({ postSlug }: LikeButtonProps) {
     const [likeCount, setLikeCount] = useState(0)
     const [hasLiked, setHasLiked] = useState(false)
     const [isLoading, setIsLoading] = useState(false)

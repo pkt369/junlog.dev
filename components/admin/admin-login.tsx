@@ -58,15 +58,15 @@ export default function AdminLogin() {
                 throw new Error(language === "ko" ? `인증 오류: ${error.message}` : `Authentication error: ${error.message}`)
             }
 
-            const isMatch = await bcrypt.compare(password, data.password_hash);
-            if (!isMatch) {
-                throw new Error(language === "ko" ? "비밀번호가 일치하지 않습니다" : "Password does not match");
-            }
-
-            if (!data || data.length === 0) {
+            if (!data) {
                 throw new Error(
                     language === "ko" ? "이메일 또는 비밀번호가 올바르지 않습니다" : "Email or password is incorrect",
                 )
+            }
+
+            const isMatch = await bcrypt.compare(password, data.password_hash);
+            if (!isMatch) {
+                throw new Error(language === "ko" ? "비밀번호가 일치하지 않습니다" : "Password does not match");
             }
 
             // 로그인 성공 후 어드민 상태 설정

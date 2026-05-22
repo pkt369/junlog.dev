@@ -401,4 +401,5 @@ FodyWeavers.xsd
 
 .DS_Store
 .next
+out/
 .env.*

@@ -14,6 +14,7 @@ export interface Database {
                     is_private: boolean
                     email?: string | null
                     parent_id?: string | null
+                    is_admin?: boolean | null
                 }
                 Insert: {
                     id?: string
@@ -25,6 +26,7 @@ export interface Database {
                     is_private?: boolean
                     email?: string | null
                     parent_id?: string | null
+                    is_admin?: boolean | null
                 }
                 Update: {
                     id?: string
@@ -36,7 +38,9 @@ export interface Database {
                     is_private?: boolean
                     email?: string | null
                     parent_id?: string | null
+                    is_admin?: boolean | null
                 }
+                Relationships: []
             }
             likes: {
                 Row: {
@@ -57,6 +61,28 @@ export interface Database {
                     post_slug?: string
                     visitor_id?: string
                 }
+                Relationships: []
+            }
+            admin_users: {
+                Row: {
+                    id: string
+                    created_at: string
+                    email: string
+                    password_hash: string
+                }
+                Insert: {
+                    id?: string
+                    created_at?: string
+                    email: string
+                    password_hash: string
+                }
+                Update: {
+                    id?: string
+                    created_at?: string
+                    email?: string
+                    password_hash?: string
+                }
+                Relationships: []
             }
         }
         Views: {

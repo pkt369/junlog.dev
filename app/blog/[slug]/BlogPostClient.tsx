@@ -12,8 +12,7 @@ import remarkGfm from "remark-gfm"
 import remarkBreaks from "remark-breaks"
 import rehypeRaw from "rehype-raw"
 import rehypeSanitize from "rehype-sanitize"
-import { useState, useCallback, useRef, useEffect } from "react"
-import { useTheme } from "next-themes"
+import { useState, useCallback, useRef } from "react"
 import LikeButton from "@/components/like-button"
 import CommentList from "@/components/comments/comment-list"
 import Prism from "prismjs"
@@ -43,17 +42,33 @@ import "prismjs/components/prism-yaml"
 // 테마 스타일
 import "prismjs/themes/prism-tomorrow.css"
 
+function escapeHtml(code: string) {
+  return code
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+}
+
+function highlightCode(code: string, lang: string) {
+  const grammar = Prism.languages[lang]
+  return grammar ? Prism.highlight(code, grammar, lang) : escapeHtml(code)
+}
+
+function getCodeChild(children: React.ReactNode) {
+  return React.Children.toArray(children).find(
+    (child): child is React.ReactElement<{ className?: string; children?: React.ReactNode }> =>
+      React.isValidElement<{ className?: string; children?: React.ReactNode }>(child) &&
+      typeof child.props.className === "string" &&
+      child.props.className.includes("language-"),
+  )
+}
+
 export default function BlogPostClient({ post }: { post: Post }) {
   const { language } = useLanguage()
   const [copied, setCopied] = useState(false)
   const copyTimeoutRef = useRef<number | null>(null)
-  const { theme } = useTheme()
-  const isDarkTheme = theme === "dark"
-
-  // Prism 초기화 및 코드 블록 하이라이팅
-  useEffect(() => {
-    Prism.highlightAll()
-  }, [post.content, language])
 
   const handleCopy = useCallback((codeText: string) => {
     navigator.clipboard.writeText(codeText)
@@ -117,51 +132,49 @@ export default function BlogPostClient({ post }: { post: Post }) {
                 rel="noopener noreferrer"
               />
             ),
-            code: ({ node, className, children, ...props }: any) => {
+            pre: ({ children }) => {
+              const codeChild = getCodeChild(children)
+              const className = codeChild?.props.className || ""
               const match = /language-(\w+)/.exec(className || "")
-              const lang = match ? match[1] : ""
-              const codeText = String(children).replace(/\n$/, "")
-              const isInline =
-                node.position &&
-                node.position.start.line === node.position.end.line;
+              const lang = match ? match[1] : "text"
+              const codeText = String(codeChild?.props.children || "").replace(/\n$/, "")
 
-              if (isInline) {
-                return (
-                  <code className="inline-code" {...props}>
-                    {children}
-                  </code>
-                )
+              if (!codeChild) {
+                return <pre>{children}</pre>
               }
 
-              // Mermaid 다이어그램 처리
               if (lang === "mermaid") {
                 return <Mermaid chart={codeText} />
               }
 
-              // 여기서 p 태그 안에 div가 들어가는 문제를 해결하기 위해
-              // 코드 블록을 별도의 React Fragment로 감싸서 반환합니다
               return (
-                <>
-                  <div className="relative my-3 bg-[#2d2d2d] rounded-lg overflow-hidden">
-                    <div className="flex items-center justify-between px-4 py-2 text-gray-200">
-                      <div className="text-xs font-medium">{lang}</div>
-                      <button
-                        onClick={() => handleCopy(codeText)}
-                        className="text-gray-400 hover:text-white transition-colors"
-                        aria-label="Copy code"
-                      >
-                        {copied ? <Check size={16} /> : <Copy size={16} />}
-                      </button>
-                    </div>
-                    <div className="overflow-x-auto">
-                      <pre className={`language-${lang || "text"} m-0 p-4 bg-[#2d2d2d] border-0`}>
-                        <code className={`language-${lang || "text"} border-0`}>{codeText}</code>
-                      </pre>
-                    </div>
+                <div className="relative my-3 bg-[#2d2d2d] rounded-lg overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-2 text-gray-200">
+                    <div className="text-xs font-medium">{lang}</div>
+                    <button
+                      onClick={() => handleCopy(codeText)}
+                      className="text-gray-400 hover:text-white transition-colors"
+                      aria-label="Copy code"
+                    >
+                      {copied ? <Check size={16} /> : <Copy size={16} />}
+                    </button>
                   </div>
-                </>
+                  <div className="overflow-x-auto">
+                    <pre className={`m-0 p-4 bg-[#2d2d2d] border-0 language-${lang}`} tabIndex={0}>
+                      <code
+                        className={`border-0 language-${lang}`}
+                        dangerouslySetInnerHTML={{ __html: highlightCode(codeText, lang) }}
+                      />
+                    </pre>
+                  </div>
+                </div>
               )
             },
+            code: ({ node, className, children, ...props }: any) => (
+              <code className={className ? `border-0 ${className}` : "inline-code"} {...props}>
+                {children}
+              </code>
+            ),
             p: ({ node, children, ...props }) => {
               // 자식 요소 중에 div나 pre가 있는지 확인
               const hasBlockElement = React.Children.toArray(children).some(
