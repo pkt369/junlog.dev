@@ -138,186 +138,27 @@ brew install awscli
 aws --version
 ```
 
-저는 안전을 위해 임시 자격 증명과 MFA를 사용하는 방식으로 진행하였습니다.
-
 <br>
 
-## CLI 접속 구조
 
-AWS CLI를 위해 SSM 접속용 IAM User와 실제 접속 권한을 가진 IAM Role을 분리했습니다.
+## CLI 로그인
 
-```text
-junlog-dev access key
-  -> MFA
-  -> sts:AssumeRole로 임시 자격 증명 요청
-  -> JUNLOG_SSM_SESSION_ROLE 임시 자격 증명
-  -> ssm:StartSession
-```
-
-<b>junlog-dev-base</b>는 액세스 키를 보관하는 기본 프로필입니다. <b>junlog-ssm</b>은 이 기본 프로필로 로그인한 뒤 MFA 코드를 확인하고, SSM 접속 권한이 들어 있는 `JUNLOG_SSM_SESSION_ROLE`의 임시 자격 증명을 받아 사용하는 프로필입니다.
-<b>액세스 키만으로는 EC2에 바로 접속할 수 없고, MFA 인증 후 IAM Role의 임시 권한을 받아야 SSM 세션을 시작할 수 있습니다.</b>
-
-<br>
-
-## IAM 리소스 역할
-
-여기서 IAM 리소스의 역할은 다음과 같습니다.
-
-| 리소스 | 역할 |
-| --- | --- |
-| <b>junlog-dev</b> | CLI에서 사용할 IAM User입니다. EC2, S3, RDS 같은 AWS 리소스 권한을 직접 주지 않습니다. |
-| <b>JUNLOG_ASSUME_SSM_ROLE_ONLY</b> | `junlog-dev`가 `JUNLOG_SSM_SESSION_ROLE`의 임시 자격 증명을 받을 수 있게 해주는 정책입니다. <b>이름 그대로 임시 자격 증명을 요청하는 권한만 허용하고, 실제 SSM 접속 권한은 포함하지 않습니다.</b> |
-| <b>JUNLOG_SSM_SESSION_ROLE</b> | Session Manager 접속 권한을 가진 IAM Role입니다. `junlog-dev`가 MFA 인증을 통과한 뒤 이 Role의 임시 자격 증명을 받으면, 그때부터 <b>AWS CLI는 이 Role의 임시 권한으로 SSM 세션을 시작합니다.</b> |
-| <b>JUNLOG_SSM_SESSION_MANAGER_ACCESS</b> | `JUNLOG_SSM_SESSION_ROLE`에 붙는 정책입니다. `ssm:StartSession`, 세션 데이터 채널, 세션 종료/재개, 인스턴스 조회에 필요한 권한만 포함합니다. |
-
-즉, <b>junlog-dev</b>의 액세스 키는 로그인 수단이고, <b>JUNLOG_ASSUME_SSM_ROLE_ONLY</b>는 SSM 접속용 임시 자격 증명을 요청할 수 있게 해주는 정책입니다.
-실제 EC2 접속 권한은 <b>JUNLOG_SSM_SESSION_ROLE</b>이 가지고 있습니다.
-
-<br>
-
-## 정책 예시
-
-<details>
-<summary><code>JUNLOG_ASSUME_SSM_ROLE_ONLY</code></summary>
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowAssumeJunlogSsmSessionRole",
-      "Effect": "Allow",
-      "Action": "sts:AssumeRole",
-      "Resource": "arn:aws:iam::<account-id>:role/JUNLOG_SSM_SESSION_ROLE"
-    }
-  ]
-}
-```
-
-</details>
-
-<details>
-<summary><code>JUNLOG_SSM_SESSION_ROLE</code> Trust policy</summary>
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::<account-id>:user/junlog-dev"
-      },
-      "Action": "sts:AssumeRole",
-      "Condition": {
-        "Bool": {
-          "aws:MultiFactorAuthPresent": "true"
-        }
-      }
-    }
-  ]
-}
-```
-
-</details>
-
-<details>
-<summary><code>JUNLOG_SSM_SESSION_MANAGER_ACCESS</code></summary>
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowStartSsmSessions",
-      "Effect": "Allow",
-      "Action": "ssm:StartSession",
-      "Resource": [
-        "arn:aws:ec2:*:<account-id>:instance/*",
-        "arn:aws:ssm:*::document/AWS-StartPortForwardingSession",
-        "arn:aws:ssm:*:<account-id>:document/SSM-SessionManagerRunShell"
-      ]
-    },
-    {
-      "Sid": "AllowOpenSessionDataChannel",
-      "Effect": "Allow",
-      "Action": "ssmmessages:OpenDataChannel",
-      "Resource": "arn:aws:ssm:*:<account-id>:session/${aws:userid}-*"
-    },
-    {
-      "Sid": "AllowManageOwnSsmSessions",
-      "Effect": "Allow",
-      "Action": [
-        "ssm:TerminateSession",
-        "ssm:ResumeSession"
-      ],
-      "Resource": "arn:aws:ssm:*:<account-id>:session/${aws:userid}-*"
-    },
-    {
-      "Sid": "AllowDescribeForSessionTargetDiscovery",
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DescribeInstances",
-        "ssm:DescribeInstanceInformation",
-        "ssm:GetConnectionStatus",
-        "ssm:DescribeSessions"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-</details>
-
-<br>
-
-<img src="/aws-ssm/iam-junlog-dev.png" alt="IAM" align="center" />
-
-<br>
-
-## AWS CLI 프로필 설정
-
-`~/.aws/credentials`:
-
-```ini
-[junlog-dev-base]
-aws_access_key_id = <access-key-id>
-aws_secret_access_key = <secret-access-key>
-```
-
-`~/.aws/config`:
-
-```ini
-[profile junlog-dev-base]
-region = ap-northeast-2
-output = json
-
-[profile junlog-ssm]
-role_arn = arn:aws:iam::<account-id>:role/JUNLOG_SSM_SESSION_ROLE
-source_profile = junlog-dev-base
-mfa_serial = arn:aws:iam::<account-id>:mfa/junlog-dev
-region = ap-northeast-2
-output = json
-```
-
-AWS CLI는 MFA 코드를 입력받아 STS 임시 자격 증명을 발급받고, 이를 `~/.aws/cli/cache`에 일정 시간 캐시합니다.
-
-<br>
-
-설정 후 먼저 프로필이 올바른 IAM 사용자로 인식되는지 확인합니다.
+AWS CLI v2 기준으로는 `aws login`을 사용해 콘솔 로그인 기반의 임시 자격 증명을 받을 수 있습니다.
+이 방식으로 전환하면 로컬에 장기 액세스 키를 따로 저장하지 않아도 되고, 콘솔 로그인 과정에서 MFA를 함께 적용할 수 있습니다.
 
 ```bash
-aws sts get-caller-identity --profile junlog-dev-base
+aws login
 ```
 
-그 다음 `junlog-ssm` 프로필이 SSM 접속용 임시 자격 증명을 받을 수 있는지 확인합니다.
+로그인이 완료되면 AWS CLI가 선택한 콘솔 세션에 해당하는 임시 자격 증명을 저장합니다.
+정상적으로 로그인되고 SSM 권한이 적용되었는지는 다음 명령으로 확인할 수 있습니다.
 
 ```bash
-aws sts get-caller-identity --profile junlog-ssm
+aws ssm describe-instance-information
 ```
 
-이때 MFA 코드를 입력합니다. 결과 ARN이 `arn:aws:sts::<account-id>:assumed-role/JUNLOG_SSM_SESSION_ROLE/...` 형태라면 정상입니다.
+여러 프로필을 나누어 사용한다면 `aws login --profile <profile-name>`으로 로그인하고, 이후 명령에도 `--profile <profile-name>`을 붙이면 됩니다.
+
 
 <br>
 
@@ -350,21 +191,21 @@ The Session Manager plugin is installed successfully. Use the AWS CLI to start a
 먼저 SSM에서 관리 중인 인스턴스를 확인합니다.
 
 ```bash
-aws ssm describe-instance-information --profile junlog-ssm
+aws ssm describe-instance-information
 ```
 
 접속할 인스턴스 ID를 확인한 뒤 세션을 시작합니다.
 
 ```bash
-aws ssm start-session --target <instance-id> --profile junlog-ssm
+aws ssm start-session --target <instance-id>
 ```
 
 자주 접속하는 인스턴스라면 alias로 등록해두면 편합니다.
 
 ```bash
 echo "
-alias ssm-dev='aws ssm start-session --target <dev-instance-id> --profile junlog-ssm'
-alias ssm-prod='aws ssm start-session --target <prod-instance-id> --profile junlog-ssm'
+alias ssm-dev='aws ssm start-session --target <dev-instance-id>'
+alias ssm-prod='aws ssm start-session --target <prod-instance-id>'
 " >> ~/.zshrc
 
 source ~/.zshrc
@@ -386,8 +227,7 @@ source ~/.zshrc
 aws ssm start-session \
   --target <instance-id> \
   --document-name AWS-StartPortForwardingSession \
-  --parameters '{"portNumber":["5432"],"localPortNumber":["15432"]}' \
-  --profile junlog-ssm
+  --parameters '{"portNumber":["5432"],"localPortNumber":["15432"]}'
 ```
 
 이후 로컬에서는 `localhost:15432`로 접근하면 됩니다.
@@ -446,6 +286,7 @@ aws --version
 - [Complete Session Manager prerequisites](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-prerequisites.html)
 - [Sample IAM policies for Session Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-restrict-access-quickstart.html)
 - [Connect to your Amazon EC2 instance using Session Manager](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-with-systems-manager-session-manager.html)
+- [Login for AWS local development using console credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html)
 - [Install the Session Manager plugin on macOS](https://docs.aws.amazon.com/systems-manager/latest/userguide/install-plugin-macos-overview.html)
 - [Start a session](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html)
 
@@ -574,181 +415,25 @@ Check the installation:
 aws --version
 ```
 
-For safety, this guide uses temporary credentials with MFA.
-
 <br>
 
-## CLI Access Structure
+## CLI Login
 
-The CLI setup separates the IAM User used for local credentials from the IAM Role that has the actual SSM permissions.
-
-```text
-junlog-dev access key
-  -> MFA
-  -> request temporary credentials with sts:AssumeRole
-  -> temporary credentials for JUNLOG_SSM_SESSION_ROLE
-  -> ssm:StartSession
-```
-
-`junlog-dev-base` is the base profile that stores the access key. `junlog-ssm` uses that base profile, asks for an MFA code, and then uses temporary credentials from `JUNLOG_SSM_SESSION_ROLE`, the role that has SSM access. The access key alone cannot start an EC2 session.
-
-<br>
-
-## IAM Resource Roles
-
-The IAM resources in this setup have the following roles.
-
-| Resource | Role |
-| --- | --- |
-| <b>junlog-dev</b> | The IAM User used by the CLI. It is not given direct permissions to AWS resources such as EC2, S3, or RDS. |
-| <b>JUNLOG_ASSUME_SSM_ROLE_ONLY</b> | A policy that lets `junlog-dev` receive temporary credentials for `JUNLOG_SSM_SESSION_ROLE`. <b>As the name suggests, it only allows requesting temporary credentials and does not include the actual SSM access permissions.</b> |
-| <b>JUNLOG_SSM_SESSION_ROLE</b> | The IAM Role with Session Manager access. After `junlog-dev` passes MFA authentication and receives temporary credentials for this Role, <b>AWS CLI starts SSM sessions using this Role's temporary permissions.</b> |
-| <b>JUNLOG_SSM_SESSION_MANAGER_ACCESS</b> | The policy attached to `JUNLOG_SSM_SESSION_ROLE`. It only includes the permissions required for `ssm:StartSession`, the session data channel, session termination/resume, and instance lookup. |
-
-In short, the <b>junlog-dev</b> access key is the login mechanism, and <b>JUNLOG_ASSUME_SSM_ROLE_ONLY</b> is the policy that allows requesting temporary credentials for SSM access.
-The actual EC2 access permission belongs to <b>JUNLOG_SSM_SESSION_ROLE</b>.
-
-<br>
-
-## Policy Examples
-
-<details>
-<summary><code>JUNLOG_ASSUME_SSM_ROLE_ONLY</code></summary>
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowAssumeJunlogSsmSessionRole",
-      "Effect": "Allow",
-      "Action": "sts:AssumeRole",
-      "Resource": "arn:aws:iam::<account-id>:role/JUNLOG_SSM_SESSION_ROLE"
-    }
-  ]
-}
-```
-
-</details>
-
-<details>
-<summary><code>JUNLOG_SSM_SESSION_ROLE</code> trust policy</summary>
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::<account-id>:user/junlog-dev"
-      },
-      "Action": "sts:AssumeRole",
-      "Condition": {
-        "Bool": {
-          "aws:MultiFactorAuthPresent": "true"
-        }
-      }
-    }
-  ]
-}
-```
-
-</details>
-
-<details>
-<summary><code>JUNLOG_SSM_SESSION_MANAGER_ACCESS</code></summary>
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowStartSsmSessions",
-      "Effect": "Allow",
-      "Action": "ssm:StartSession",
-      "Resource": [
-        "arn:aws:ec2:*:<account-id>:instance/*",
-        "arn:aws:ssm:*::document/AWS-StartPortForwardingSession",
-        "arn:aws:ssm:*:<account-id>:document/SSM-SessionManagerRunShell"
-      ]
-    },
-    {
-      "Sid": "AllowOpenSessionDataChannel",
-      "Effect": "Allow",
-      "Action": "ssmmessages:OpenDataChannel",
-      "Resource": "arn:aws:ssm:*:<account-id>:session/${aws:userid}-*"
-    },
-    {
-      "Sid": "AllowManageOwnSsmSessions",
-      "Effect": "Allow",
-      "Action": [
-        "ssm:TerminateSession",
-        "ssm:ResumeSession"
-      ],
-      "Resource": "arn:aws:ssm:*:<account-id>:session/${aws:userid}-*"
-    },
-    {
-      "Sid": "AllowDescribeForSessionTargetDiscovery",
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DescribeInstances",
-        "ssm:DescribeInstanceInformation",
-        "ssm:GetConnectionStatus",
-        "ssm:DescribeSessions"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-</details>
-
-<br>
-
-## AWS CLI Profile Configuration
-
-`~/.aws/credentials`:
-
-```ini
-[junlog-dev-base]
-aws_access_key_id = <access-key-id>
-aws_secret_access_key = <secret-access-key>
-```
-
-`~/.aws/config`:
-
-```ini
-[profile junlog-dev-base]
-region = ap-northeast-2
-output = json
-
-[profile junlog-ssm]
-role_arn = arn:aws:iam::<account-id>:role/JUNLOG_SSM_SESSION_ROLE
-source_profile = junlog-dev-base
-mfa_serial = arn:aws:iam::<account-id>:mfa/junlog-dev
-region = ap-northeast-2
-output = json
-```
-
-AWS CLI prompts for an MFA code, issues temporary STS credentials, and caches them under `~/.aws/cli/cache` for a certain amount of time.
-
-<br>
-
-After setting this up, first check whether the profile is recognized as the correct IAM user.
+With AWS CLI v2, you can use `aws login` to receive temporary credentials based on your AWS Management Console session.
+This avoids storing long-term access keys locally, and MFA can be applied during the console sign-in flow.
 
 ```bash
-aws sts get-caller-identity --profile junlog-dev-base
+aws login
 ```
 
-Then check whether the `junlog-ssm` profile can receive temporary credentials for SSM access.
+After login completes, AWS CLI stores temporary credentials for the selected console session.
+You can verify that the CLI is authenticated and has SSM access with the following command.
 
 ```bash
-aws sts get-caller-identity --profile junlog-ssm
+aws ssm describe-instance-information
 ```
 
-Enter the MFA code at this point. If the resulting ARN has the form `arn:aws:sts::<account-id>:assumed-role/JUNLOG_SSM_SESSION_ROLE/...`, it is working correctly.
+If you use separate profiles, run `aws login --profile <profile-name>` and add `--profile <profile-name>` to the commands that follow.
 
 <br>
 
@@ -781,21 +466,21 @@ The Session Manager plugin is installed successfully. Use the AWS CLI to start a
 First, check the instances managed by SSM.
 
 ```bash
-aws ssm describe-instance-information --profile junlog-ssm
+aws ssm describe-instance-information
 ```
 
 After finding the target instance ID, start a session.
 
 ```bash
-aws ssm start-session --target <instance-id> --profile junlog-ssm
+aws ssm start-session --target <instance-id>
 ```
 
 If you frequently connect to specific instances, aliases are convenient. Replace the instance IDs with values from your own environment.
 
 ```bash
 echo "
-alias ssm-dev='aws ssm start-session --target <dev-instance-id> --profile junlog-ssm'
-alias ssm-prod='aws ssm start-session --target <prod-instance-id> --profile junlog-ssm'
+alias ssm-dev='aws ssm start-session --target <dev-instance-id>'
+alias ssm-prod='aws ssm start-session --target <prod-instance-id>'
 " >> ~/.zshrc
 
 source ~/.zshrc
@@ -815,8 +500,7 @@ For example, the following command maps port `5432` inside EC2 to local port `15
 aws ssm start-session \
   --target <instance-id> \
   --document-name AWS-StartPortForwardingSession \
-  --parameters '{"portNumber":["5432"],"localPortNumber":["15432"]}' \
-  --profile junlog-ssm
+  --parameters '{"portNumber":["5432"],"localPortNumber":["15432"]}'
 ```
 
 After the session starts, connect to `localhost:15432` from your local machine.
@@ -874,5 +558,6 @@ Check the following in order.
 - [Complete Session Manager prerequisites](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-prerequisites.html)
 - [Sample IAM policies for Session Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-restrict-access-quickstart.html)
 - [Connect to your Amazon EC2 instance using Session Manager](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-with-systems-manager-session-manager.html)
+- [Login for AWS local development using console credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html)
 - [Install the Session Manager plugin on macOS](https://docs.aws.amazon.com/systems-manager/latest/userguide/install-plugin-macos-overview.html)
 - [Start a session](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html)
