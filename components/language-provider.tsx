@@ -80,18 +80,14 @@ const translations = {
     en: "Introduction",
   },
   "about.bio.p1": {
-    ko: "저는 Software Engineer 로 일하며, 풀스택 경험을 보유하고 있습니다.",
-    en: "I'm a software engineer with full-stack experience.",
+    ko: "저는 백엔드 개발자 출신이지만 프론트엔드, 풀스택 개발에도 관심이 많습니다.",
+    en: "I'm a backend developer by background, but I have a strong interest in frontend and full-stack development as well.",
   },
   "about.bio.p2": {
-    ko: `개발과 새로운 기술을 배우는 것을 좋아합니다. 특히 새로운 AI 써보는 것을 좋아하여 여러 프로젝트들을 여러 AI 들과 함께 진행하고 있습니다.
-        또한 AI 를 이용만 하는게 아닌 항상 어떻게 동작하는지 알고 정확히 알고 사용을 하는 것을 목표로 하고 있습니다.
-        
-        개발을 할때는 근거를 먼저 찾고 근거에 따라 개발하는 것이 저의 개발 철학입니다.`,
-    en: `I enjoy development and learning new technologies. In particular, I like exploring and using the latest AI tools in various projects. 
-        Rather than just using AI, I always aim to understand how it works and ensure I fully grasp the code it generates.
-
-        My development philosophy is to first find the rationale and then develop based on that foundation.`,
+    ko: `새로운 기술을 배우고 실제 프로젝트에 적용하는 것을 즐기는 개발자입니다. 특히 AI 기술에 관심이 많아 다양한 AI 도구를 활용해 프로젝트를 진행하고 있으며, 단순한 사용을 넘어 동작 원리와 기술적 배경을 이해한 뒤 정확하게 활용하는 것을 지향합니다.
+          개발 과정에서는 감이나 관성보다 근거를 중요하게 생각합니다. 문제를 해결할 때 먼저 충분한 근거를 찾고, 이를 바탕으로 의사결정하고 구현하는 것이 저의 개발 철학입니다.`,
+    en: `I'm a developer who enjoys learning new technologies and applying them to real projects. I have a particular interest in AI technologies, and I actively use various AI tools in my projects. I strive to understand the underlying principles and technical background of these tools to use them accurately, rather than just using them superficially.
+          In my development process, I prioritize evidence over intuition or inertia. When solving problems, I first seek sufficient evidence and base my decision-making and implementation on that. This is my development philosophy.`,
   },
   "about.skills.title": {
     ko: "기술",
