@@ -75,6 +75,31 @@ RAG는 **Retrieval-Augmented Generation**의 줄임말로, 검색 증강 생성�
 
 <br>
 
+## 요약본 저장 순서
+요약본 저장 순서는 아래와 같습니다.
+1. 메세지가 일정 갯수 이상 쌓이면 백엔드에서 `startIndex`, `endIndex` 를 포함한 요약 작업 이벤트를 Kafka 토픽에 발행합니다.
+2. Consumer 는 Kafka 토픽의 메세지를 읽고, 해당 대화의 `startIndex` ~ `endIndex` 범위에 해당하는 메세지를 디비에서 가져옵니다.
+3. 가져온 메세지들을 LLM 에 전달해 최근 대화 요약본을 생성합니다.
+4. 생성된 요약본을 Python 서버로 전달하고, Python 서버는 이를 LangGraph 의 checkpoint 저장소에 저장합니다.
+
+<br>
+
+비동기로 처리한 이유는 다음과 같습니다.
+- 요약 작업을 채팅 응답과 분리해 응답시간을 줄일 수 있습니다.
+- 실패한 요약 작업을 메세지 단위로 재처리하기 쉽습니다.
+
+<br>
+
+## 데일리 요약본 저장 순서
+데일리 요약본 저장 순서는 다음과 같습니다.
+1. 특정 시간이 되면 batch 가 동작하여 작업을 실행합니다.
+2. batch 는 요약이 안된 최근 메세지들을 포함해 Python 서버로 요청합니다.
+3. Python 서버는 요약이 안된 최근 메세지들과 LangGraph checkpoint 저장소에 있는 요약본을 함께 사용해 LLM 에게 데일리 요약을 요청합니다.
+4. 생성된 데일리 요약본을 임베딩합니다.
+5. 요약본 원문, 임베딩 값, 메타데이터를 Vector DB 에 저장합니다.
+
+<br>
+
 # 회고
 장기기억 관련 경험이 없어 처음에는 두려움이 앞섰지만, Vector DB가 어떻게 동작하는지 공부하고 실제 서비스에 적용하면서 많이 배울 수 있었습니다.
 
@@ -153,6 +178,36 @@ The search flow is as follows.
 In summary, when the amount of conversation increases, recent conversations are summarized first. After a certain point, those summaries are summarized again into long-term memory summaries.
 
 In other words, instead of passing every conversation to the LLM every time, the system keeps the recent context short and retrieves only the necessary parts of older conversations from the Vector DB.
+
+<br>
+
+## Summary Storage Flow
+
+The summary storage flow is as follows.
+
+1. When a certain number of messages has accumulated, the backend publishes a summary job event containing `startIndex` and `endIndex` to a Kafka topic.
+2. The Consumer reads the message from the Kafka topic and retrieves the messages in the `startIndex` ~ `endIndex` range from the database.
+3. The retrieved messages are sent to the LLM to generate a recent conversation summary.
+4. The generated summary is sent to the Python server, and the Python server stores it in the LangGraph checkpoint storage.
+
+<br>
+
+The reason for processing this asynchronously is as follows.
+
+- The summary job is separated from the chat response flow, which helps reduce response time.
+- Failed summary jobs can be retried more easily at the message level.
+
+<br>
+
+## Daily Summary Storage Flow
+
+The daily summary storage flow is as follows.
+
+1. At a specific time, a batch job runs.
+2. The batch job sends a request to the Python server with recent messages that have not yet been summarized.
+3. The Python server uses both the unsummarized recent messages and the summaries stored in LangGraph checkpoint storage to request a daily summary from the LLM.
+4. The generated daily summary is embedded.
+5. The summary text, embedding value, and metadata are stored in the Vector DB.
 
 <br>
 
