@@ -55,41 +55,59 @@ function FeaturedPosts() {
     {
       id: "0",
       title: {
-        ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (1)",
-        en: "Handling 2,000 TPS: Payment System (Part 1)"
+        ko: "RAG 적용 후기: 캐릭터 장기기억 구현하기",
+        en: "RAG Experience: Building Long-Term Memory for Characters",
       },
       excerpt: {
-        ko: "아직 최적화 전 상태에서 시스템이 얼마나 트래픽을 견디는지 테스트하고, 왜 아키텍처를 공부해야 하는지 알아보겠습니다.",
-        en: "We will test how much traffic the system can handle in its unoptimized state and explore why studying the architecture is important."
+        ko: "RAG를 활용해 캐릭터가 이전 대화를 기억하도록 구현한 과정과 시행착오를 정리했습니다.",
+        en: "A practical write-up on using RAG to help characters remember previous conversations.",
       },
-      date: "2025-08-23",
+      date: "2026-06-05",
       category: {
         ko: "Backend",
         en: "Backend",
       },
-      tags: ["Architecture", "Trafic", "Java", "Spring Boot"],
-      slug: "payment-system-1"
+      tags: ["RAG", "LLM", "AI", "Embedding", "Vector Search"],
+      slug: "long-term-memory",
     },
     {
       id: "1",
       title: {
-        ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (2)",
-        en: "Handling 2,000 TPS: Payment System (Part 2)"
+        ko: "AWS SSM 가이드",
+        en: "AWS Systems Manager (SSM) Guide",
       },
       excerpt: {
-        ko: "모든 TPS 안정적으로 받기 위해 어떻게 개선할 수 있는지 시스템 아키텍처 개선으로 알아보겠습니다.",
-        en: "Let’s explore how to improve the system architecture to handle all TPS stably."
+        ko: "SSH 없이 EC2에 안전하게 접속하는 AWS SSM 설정 가이드",
+        en: "A practical guide to accessing EC2 securely without SSH using AWS SSM",
       },
-      date: "2025-08-27",
+      date: "2026-05-21",
       category: {
-        ko: "Backend",
-        en: "Backend"
+        ko: "Infra",
+        en: "Infra",
       },
-      tags: ["Architecture", "Trafic", "Java", "Spring Boot", "Connection Pool", "Kafka"],
-      slug: "payment-system-2"
+      tags: ["Infra", "AWS", "SSM", "Systems Manager", "SSH"],
+      slug: "aws-ssm",
     },
     {
       id: "2",
+      title: {
+        ko: "CloudFront + S3 Signed Cookie 환경에서 CORS 에러 완벽 해결하기",
+        en: "Solving CORS Errors in CloudFront + S3 with Signed Cookies",
+      },
+      excerpt: {
+        ko: "CloudFront 의 Signed Cookie 방식을 채택했을때 발생한 CORS 트러블 슈팅에 대해서 얘기해보겠습니다.",
+        en: "I will discuss the CORS troubleshooting process encountered when adopting CloudFront Signed Cookies.",
+      },
+      date: "2026-01-13",
+      category: {
+        ko: "Infra",
+        en: "Infra",
+      },
+      tags: ["Infra", "Backend", "AWS", "S3", "Bucket", "CloudFront", "Caching", "CORS", "Signed Cookie"],
+      slug: "cloudfront-cors",
+    },
+    {
+      id: "3",
       title: {
         ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (3)",
         en: "Handling 2,000 TPS: Payment System (Part 3)"
@@ -107,58 +125,40 @@ function FeaturedPosts() {
       slug: "payment-system-3"
     },
     {
-      id: "3",
-      title: {
-        ko: "Ubuntu 환경에서 도커로 Log Server 세팅하기",
-        en: "Setting Up Log Server using Docker on Ubuntu",
-      },
-      excerpt: {
-        ko: "Docker compose 를 이용해 Vector + Clickhouse + Grafana 조합으로 Log Sever 구축하기",
-        en: "Setting Up a Log Server with Vector, Clickhouse, and Grafana using Docker Compose",
-      },
-      date: "2025-06-17",
-      category: {
-        ko: "Infra",
-        en: "Infra",
-      },
-      tags: ["Infra", "Log", "Vector", "Clickhouse", "Grafana", "Docker", "Docker-Compose", "Ubuntu"],
-      slug: "setting-up-log-server",
-    },
-    {
       id: "4",
       title: {
-        ko: "Grafana 를 이용해 에러 발생 시 슬랙으로 메세지 받기",
-        en: "Receiving Slack Notifications for Errors using Grafana",
+        ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (2)",
+        en: "Handling 2,000 TPS: Payment System (Part 2)"
       },
       excerpt: {
-        ko: "Grafana 의 Alerting 기능을 이용해 Slack 으로 메세지 받기",
-        en: "Receive Slack notifications using Grafana's Alerting feature",
+        ko: "모든 TPS 안정적으로 받기 위해 어떻게 개선할 수 있는지 시스템 아키텍처 개선으로 알아보겠습니다.",
+        en: "Let’s explore how to improve the system architecture to handle all TPS stably."
       },
-      date: "2025-06-18",
+      date: "2025-08-27",
       category: {
-        ko: "Infra",
-        en: "Infra",
+        ko: "Backend",
+        en: "Backend"
       },
-      tags: ["Infra", "Log", "Clickhouse", "Grafana", "Slack", "Alert"],
-      slug: "setting-up-grafana-slack",
+      tags: ["Architecture", "Traffic", "Java", "Spring Boot", "Connection Pool", "Kafka", "Asynchronous"],
+      slug: "payment-system-2"
     },
     {
       id: "5",
       title: {
-        ko: "MeiliSearch 사용 후기: 적은 메모리로 검색 기능 구현하기",
-        en: "Our MeiliSearch Experience: Building Fast Search on Low-Memory Servers",
+        ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (1)",
+        en: "Handling 2,000 TPS: Payment System (Part 1)"
       },
       excerpt: {
-        ko: "한글을 지원하는 MeiliSearch 로 적은 메모리로 검색을 구현한 후기",
-        en: "Building a Korean-Capable Search System with MeiliSearch on a Low-Memory Server",
+        ko: "아직 최적화 전 상태에서 시스템이 얼마나 트래픽을 견디는지 테스트하고, 왜 아키텍처를 공부해야 하는지 알아보겠습니다.",
+        en: "We will test how much traffic the system can handle in its unoptimized state and explore why studying the architecture is important."
       },
-      date: "2025-07-20",
+      date: "2025-08-23",
       category: {
         ko: "Backend",
         en: "Backend",
       },
-      tags: ["Search", "Database", "Spring Boot", "Docker", "Java"],
-      slug: "search-meilisearch",
+      tags: ["Architecture", "Traffic", "Java", "Spring Boot"],
+      slug: "payment-system-1"
     },
   ]
 

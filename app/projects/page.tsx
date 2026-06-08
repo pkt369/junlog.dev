@@ -63,13 +63,21 @@ function ProjectCard({ project }: { project: Project }) {
             </Button>
           )}
           {project.site && (
-          <Button size="sm" className="flex-grow sm:flex-grow-0" asChild>
-            <Link href={project.site} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="h-4 w-4 mr-2" />
-              Site
-            </Link>
-          </Button>
-        )}
+            <Button size="sm" className="flex-grow sm:flex-grow-0" asChild>
+              <Link href={project.site} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="h-4 w-4 mr-2" />
+                {project.siteLabel?.[language] ?? "Site"}
+              </Link>
+            </Button>
+          )}
+          {project.googlePlay && (
+            <Button size="sm" className="flex-grow sm:flex-grow-0" asChild>
+              <Link href={project.googlePlay} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Google Play
+              </Link>
+            </Button>
+          )}
         </div>
       </CardFooter>
     </Card>
@@ -110,47 +118,16 @@ type Project = {
   githubFrontend?: string
   githubBackend?: string
   site?: string
+  siteLabel?: {
+    ko: string
+    en: string
+  }
+  googlePlay?: string
 }
 
 const projects: Project[] = [
   {
     id: 1,
-    title: {
-      ko: "Smart Lineup",
-      en: "Smart Lineup",
-    },
-    description: {
-      ko: "프런트는 React, 백엔드는 Spring Boot 로 구현하였습니다.",
-      en: "Frontend is implemented with React, and backend is implemented with Spring Boot.",
-    },
-    details: {
-      ko: "상점이나 병원 등에서 줄서는 사람들을 쉽게 관리해주는 웹 애플리케이션",
-      en: "A web application that helps manage people waiting in line at stores or hospitals.",
-    },
-    technologies: ["React", "Vite", "TypeScript", "Tailwind CSS", "Spring Boot", "PostgreSQL", "docker"],
-    githubFrontend: "https://github.com/smart-lineup/api",
-    githubBackend: "https://github.com/pkt369/smart-lineup-front",
-    site: "https://smart-lineup.com",
-  },
-  {
-    id: 2,
-    title: {
-      ko: "Echo Eco",
-      en: "Echo Eco",
-    },
-    description: {
-      ko: "앱테크 환경 인식 개선 프로젝트",
-      en: "App technology environment enhancement project",
-    },
-    details: {
-      ko: "앱에서 환경인식에 관련된 컨텐츠와 광고를 소비하면 앱내 경험치를 얻고, 일정 레벨에 도달하면 상품을 주는 앱테크입니다.",
-      en: "Users earn XP by viewing content and ads. Reach a level, get real rewards.",
-    },
-    technologies: ["React", "Java", "SpringBoot", "MySQL", "JavaScript", "docker", "AWS"],
-    githubBackend: "https://github.com/swyp-lucky7/echo-eco",
-  },
-  {
-    id: 3,
     title: {
       ko: "Junlog dev",
       en: "Junlog dev",
@@ -168,37 +145,90 @@ const projects: Project[] = [
     site: "https://junlog.dev",
   },
   {
-    id: 4,
+    id: 2,
     title: {
-      ko: "Senagg",
-      en: "Senagg",
+      ko: "TripKit - Packing List",
+      en: "TripKit - Packing List",
     },
     description: {
-      ko: "세븐 나이츠 커뮤니티 플랫폼",
-      en: "Seven Knights Community Platform",
+      ko: "여행 짐 체크리스트 앱",
+      en: "Travel packing checklist app",
     },
     details: {
-      ko: "친구들과 함께 개발한 세븐 나이츠 커뮤니티 플랫폼입니다.",
-      en: "A community platform for Seven Knights developed with friends.",
+      ko: "여행 전 필요한 준비물을 체크하고 빠뜨린 물건 없이 짐을 챙길 수 있도록 도와주는 모바일 앱입니다.",
+      en: "A mobile app that helps users prepare packing checklists and avoid forgetting items before a trip.",
     },
-    technologies: ["React", "NextJs", "Mysql", "Spring Boot", "Java", "docker", "MeiliSearch", "VPS"],
-    site: "https://sena.gg",
+    technologies: ["iOS", "Android", "iPadOS", "Travel", "App Store", "Google Play"],
+    site: "https://apps.apple.com/us/app/tripkit-packing-list/id6769991684",
+    siteLabel: {
+      ko: "App Store",
+      en: "App Store",
+    },
+    googlePlay: "https://play.google.com/store/apps/details?id=app.datasurfing.tripkit",
+  },
+  {
+    id: 3,
+    title: {
+      ko: "Coslog - Costume Planner",
+      en: "Coslog - Costume Planner",
+    },
+    description: {
+      ko: "의상과 코스프레 플래너 앱",
+      en: "Costume and cosplay planner app",
+    },
+    details: {
+      ko: "의상 준비 과정과 코스프레 계획을 정리하고 관리할 수 있도록 만든 모바일 앱입니다.",
+      en: "A mobile app for organizing costume preparation and managing cosplay plans.",
+    },
+    technologies: ["iOS", "Android", "iPadOS", "Productivity", "App Store", "Google Play"],
+    site: "https://apps.apple.com/us/app/coslog-costume-planner/id6758619186",
+    siteLabel: {
+      ko: "App Store",
+      en: "App Store",
+    },
+    googlePlay: "https://play.google.com/store/apps/details?id=app.datasurfing.coslog",
+  },
+  {
+    id: 4,
+    title: {
+      ko: "Color Mate – Color Picker",
+      en: "Color Mate – Color Picker",
+    },
+    description: {
+      ko: "사진에서 색상을 추출하는 컬러 피커 앱",
+      en: "Color picker app for extracting colors from photos",
+    },
+    details: {
+      ko: "사진에서 색상을 추출하고 컬러 정보를 확인할 수 있도록 만든 모바일 그래픽 디자인 도구 앱입니다.",
+      en: "A mobile graphics and design utility app for extracting colors from photos and checking color information.",
+    },
+    technologies: ["iOS", "Android", "iPadOS", "Graphics & Design", "App Store", "Google Play"],
+    site: "https://apps.apple.com/us/app/color-mate-color-picker/id6755136433",
+    siteLabel: {
+      ko: "App Store",
+      en: "App Store",
+    },
+    googlePlay: "https://play.google.com/store/apps/details?id=app.datasurfing.colormate",
   },
   {
     id: 5,
     title: {
-      ko: "hangout",
-      en: "hangout",
+      ko: "DogWalk - Track your walks",
+      en: "DogWalk - Track your walks",
     },
     description: {
-      ko: "영어 회화 문제 추천 서비스",
-      en: "English conversation questions recommendation service",
+      ko: "반려견 산책 기록 앱",
+      en: "Dog walking tracker app",
     },
     details: {
-      ko: "meetup 에서 영어 회화를 할수 있게 도와주는 서비스입니다.",
-      en: "A service that helps you practice English conversation with meetup.",
+      ko: "반려견과의 산책 기록을 남기고 산책 활동을 관리할 수 있도록 만든 iOS 앱입니다.",
+      en: "An iOS app for recording walks with pets and managing walking activity.",
     },
-    technologies: ["React", "NextJs", "Postgres", "NestJS", "docker", "VPS", "Redis", "Nginx"],
-    site: "https://hangout.datasurfing.app",
+    technologies: ["iOS", "Lifestyle", "Location", "App Store"],
+    site: "https://apps.apple.com/us/app/dogwalk-track-your-walks/id6753666182",
+    siteLabel: {
+      ko: "App Store",
+      en: "App Store",
+    },
   },
 ]
