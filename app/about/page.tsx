@@ -1,7 +1,14 @@
 import { TranslatedText } from "@/components/translated-text"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { buildStaticMetadata } from "@/lib/seo"
 import { Github, Twitter, Linkedin, Mail } from "lucide-react"
 import Link from "next/link"
+
+export const metadata = buildStaticMetadata({
+  title: "About Sejun Park",
+  description: "About Sejun Park, a developer writing about backend engineering, infrastructure, and web development.",
+  path: "/about",
+})
 
 export default function AboutPage() {
   return (

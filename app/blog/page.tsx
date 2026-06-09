@@ -1,6 +1,13 @@
 import { BlogCard } from "@/components/blog-card"
 import { getSortedPostsData, getAllTags } from "@/lib/posts"
+import { buildStaticMetadata } from "@/lib/seo"
 import Link from "next/link"
+
+export const metadata = buildStaticMetadata({
+  title: "Blog",
+  description: "Technical articles about backend engineering, infrastructure, and web development.",
+  path: "/blog",
+})
 
 export default async function BlogPage() {
   const posts = await getSortedPostsData()

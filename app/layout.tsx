@@ -8,34 +8,61 @@ import { AdminAuthProvider } from "@/hooks/use-admin-auth"
 import { Toaster } from "@/components/ui/toaster"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
+import { siteConfig } from "@/lib/seo"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "JunLog Blog",
-  description: "A personal development blog",
+  metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
+  title: {
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  authors: [{ name: siteConfig.author, url: siteConfig.url }],
+  creator: siteConfig.author,
+  publisher: siteConfig.author,
+  keywords: ["JunLog", "Sejun Park", "Backend", "Infrastructure", "Web Development", "Spring Boot", "Next.js"],
+  alternates: {
+    canonical: "/",
+    types: {
+      "application/rss+xml": "/rss.xml",
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://junlog.dev",
-    siteName: "JunLog",
-    title: "JunLog Blog",
-    description: "A personal development blog about web development, programming, and technology",
+    url: "/",
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
     images: [
       {
-        url: "https://yourblog.com/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "JunLog",
+        url: siteConfig.defaultOgImage,
+        width: 861,
+        height: 861,
+        alt: siteConfig.name,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "JunLog Blog",
-    description: "A personal development blog about web development, programming, and technology",
-    images: ["https://yourblog.com/og-image.jpg"],
-    creator: "@sejun",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.defaultOgImage],
+    creator: siteConfig.twitterCreator,
   },
 }
 
@@ -46,9 +73,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="alternate" type="application/rss+xml" title="RSS Feed for JunLog" href="/rss.xml" />
-      </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LanguageProvider>
