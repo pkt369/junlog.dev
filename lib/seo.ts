@@ -77,9 +77,20 @@ export function buildPostMetadata(post: PostMetadata): Metadata {
   return {
     title,
     description,
-    keywords: [...defaultKeywords, post.category.en, ...(post.tags || [])],
+    keywords: [...defaultKeywords, post.category.ko, post.category.en, post.title.ko, post.title.en, ...(post.tags || [])],
     alternates: {
       canonical: path,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
     openGraph: {
       type: "article",

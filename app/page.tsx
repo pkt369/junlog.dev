@@ -55,6 +55,24 @@ function FeaturedPosts() {
     {
       id: "0",
       title: {
+        ko: "Vector Database 이해하기: 동작 방식과 검색 흐름",
+        en: "Understanding Vector Databases: How They Work and Search",
+      },
+      excerpt: {
+        ko: "Vector Database가 데이터를 벡터로 저장하고 유사도 검색을 수행하는 방식",
+        en: "How vector databases store data as vectors and perform similarity search",
+      },
+      date: "2026-06-09",
+      category: {
+        ko: "Backend",
+        en: "Backend",
+      },
+      tags: ["Database", "Vector Database", "Embedding", "Similarity Search", "ANN"],
+      slug: "vector-db",
+    },
+    {
+      id: "1",
+      title: {
         ko: "RAG 적용 후기: 캐릭터 장기기억 구현하기",
         en: "RAG Experience: Building Long-Term Memory for Characters",
       },
@@ -71,7 +89,7 @@ function FeaturedPosts() {
       slug: "long-term-memory",
     },
     {
-      id: "1",
+      id: "2",
       title: {
         ko: "AWS SSM 가이드",
         en: "AWS Systems Manager (SSM) Guide",
@@ -89,7 +107,7 @@ function FeaturedPosts() {
       slug: "aws-ssm",
     },
     {
-      id: "2",
+      id: "3",
       title: {
         ko: "CloudFront + S3 Signed Cookie 환경에서 CORS 에러 완벽 해결하기",
         en: "Solving CORS Errors in CloudFront + S3 with Signed Cookies",
@@ -107,7 +125,7 @@ function FeaturedPosts() {
       slug: "cloudfront-cors",
     },
     {
-      id: "3",
+      id: "4",
       title: {
         ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (3)",
         en: "Handling 2,000 TPS: Payment System (Part 3)"
@@ -125,7 +143,7 @@ function FeaturedPosts() {
       slug: "payment-system-3"
     },
     {
-      id: "4",
+      id: "5",
       title: {
         ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (2)",
         en: "Handling 2,000 TPS: Payment System (Part 2)"
@@ -141,24 +159,6 @@ function FeaturedPosts() {
       },
       tags: ["Architecture", "Traffic", "Java", "Spring Boot", "Connection Pool", "Kafka", "Asynchronous"],
       slug: "payment-system-2"
-    },
-    {
-      id: "5",
-      title: {
-        ko: "초당 2,000건 트랜잭션을 견디는 결제 시스템 만들기 (1)",
-        en: "Handling 2,000 TPS: Payment System (Part 1)"
-      },
-      excerpt: {
-        ko: "아직 최적화 전 상태에서 시스템이 얼마나 트래픽을 견디는지 테스트하고, 왜 아키텍처를 공부해야 하는지 알아보겠습니다.",
-        en: "We will test how much traffic the system can handle in its unoptimized state and explore why studying the architecture is important."
-      },
-      date: "2025-08-23",
-      category: {
-        ko: "Backend",
-        en: "Backend",
-      },
-      tags: ["Architecture", "Traffic", "Java", "Spring Boot"],
-      slug: "payment-system-1"
     },
   ]
 

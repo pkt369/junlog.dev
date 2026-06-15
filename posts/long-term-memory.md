@@ -28,6 +28,8 @@ RAG는 **Retrieval-Augmented Generation**의 줄임말로, 검색 증강 생성�
 
 캐릭터 챗봇 서비스에서는 이전 대화 내용을 검색해 캐릭터가 과거의 대화를 기억하는 것처럼 응답할 수 있습니다. 이번에는 이러한 장기기억 구조를 구현하기 위해 Vector DB인 Qdrant를 적용했습니다.
 
+Vector DB에 관련한 내용은 [여기](/blog/vector-db)에 작성해두었습니다.
+
 <br>
 
 # 이번 글 범위
@@ -128,6 +130,8 @@ RAG stands for **Retrieval-Augmented Generation**.
 In simple terms, it is a method where **the LLM does not generate an answer immediately, but first retrieves relevant documents or memories and then uses that information to generate a response**.
 
 In a character chatbot service, RAG allows the character to retrieve previous conversations and respond as if it remembers the past. To build this long-term memory structure, we applied Qdrant as the Vector DB.
+
+I wrote more about Vector DB [here](/blog/vector-db).
 
 <br>
 

@@ -34,6 +34,22 @@ test("builds canonical article metadata from post frontmatter", () => {
   assert.equal(metadata.twitter?.card, "summary_large_image")
 })
 
+test("marks blog post metadata as indexable for Google", () => {
+  const metadata = buildPostMetadata(post)
+
+  assert.deepEqual(metadata.robots, {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  })
+})
+
 test("builds sitemap entries for static pages, posts, and tags", () => {
   const sitemap = buildSitemapEntries({
     posts: [post],
